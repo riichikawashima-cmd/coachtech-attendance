@@ -1,48 +1,57 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.app')
 
-<head>
-    <title>Register</title>
-</head>
+@section('title', '会員登録')
 
-<body>
-    <h1>Register</h1>
+@section('css')
+<link rel="stylesheet" href="{{ asset('css/register.css') }}">
+@endsection
 
-    @if ($errors->any())
-    <div>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+@section('content')
+<div class="register-wrapper">
+    <div class="register">
+        <h2 class="register__title">会員登録</h2>
+
+        @if ($errors->any())
+        <div class="register__error">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        <form method="POST" action="{{ route('register') }}" class="register__form">
+            @csrf
+
+            <div class="register__group">
+                <label>名前</label>
+                <input type="text" name="name" value="{{ old('name') }}">
+            </div>
+
+            <div class="register__group">
+                <label>メールアドレス</label>
+                <input type="email" name="email" value="{{ old('email') }}">
+            </div>
+
+            <div class="register__group">
+                <label>パスワード</label>
+                <input type="password" name="password">
+            </div>
+
+            <div class="register__group">
+                <label>パスワード確認</label>
+                <input type="password" name="password_confirmation">
+            </div>
+
+            <button type="submit" class="register__button">
+                登録する
+            </button>
+        </form>
+
+        <a href="{{ route('login') }}" class="register__login-link">
+            ログインはこちら
+        </a>
     </div>
-    @endif
-
-    <form method="POST" action="/register">
-        @csrf
-
-        <div>
-            <label>Name</label>
-            <input type="text" name="name" required>
-        </div>
-
-        <div>
-            <label>Email</label>
-            <input type="email" name="email" required>
-        </div>
-
-        <div>
-            <label>Password</label>
-            <input type="password" name="password" required>
-        </div>
-
-        <div>
-            <label>Confirm Password</label>
-            <input type="password" name="password_confirmation" required>
-        </div>
-
-        <button type="submit">Register</button>
-    </form>
-</body>
-
-</html>
+</div>
+@endsection

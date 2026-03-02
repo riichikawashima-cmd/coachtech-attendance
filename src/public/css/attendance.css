@@ -1,0 +1,75 @@
+.attendance {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background: #f3f4f6;
+    text-align: center;
+    padding-top: 180px;
+    align-items: flex-start;
+}
+
+.attendance__status {
+    display: inline-block;
+    padding: 6px 18px;
+    background: #e5e7eb;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: #000;
+}
+
+.attendance__date {
+    font-size: 30px;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.attendance__time {
+    font-size: 58px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.attendance__message {
+    margin-top: 20px;
+}
+
+.attendance__actions-row {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+}
+
+.attendance__actions button {
+    width: 160px;
+    height: 60px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+.attendance__actions button:not(.attendance__button--primary):not(.attendance__button--secondary) {
+    background: #000;
+    color: #fff;
+}
+
+.attendance__actions .attendance__button--primary {
+    background: #000;
+    color: #fff;
+}
+
+.attendance__actions .attendance__button--secondary {
+    background: #fff;
+    color: #000;
+    border: none;
+}
+
+.attendance__thanks {
+    font-size: 22px;
+    font-weight: 600;
+    margin-top: 20px;
+}

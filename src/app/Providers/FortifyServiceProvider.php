@@ -16,26 +16,20 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+    public function register(): void {}
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        // ✅ まずViewを返す設定（これが無いと /register で落ちる）
         Fortify::loginView(function () {
             return view('auth.login');
         });
 
         Fortify::registerView(function () {
             return view('auth.register');
+        });
+
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
         });
 
         Fortify::requestPasswordResetLinkView(function () {
@@ -54,7 +48,6 @@ class FortifyServiceProvider extends ServiceProvider
 
         RateLimiter::for('login', function (Request $request) {
             $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
-
             return Limit::perMinute(5)->by($throttleKey);
         });
 
