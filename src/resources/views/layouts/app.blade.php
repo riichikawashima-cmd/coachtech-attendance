@@ -20,7 +20,7 @@
             <nav class="header__nav">
                 <a href="{{ route('attendance.index') }}" class="header__link">勤怠</a>
                 <a href="{{ route('attendance.list') }}" class="header__link">勤怠一覧</a>
-                <a href="/attendance/request" class="header__link">申請</a>
+                <a href="{{ route('stamp_correction_request.list') }}" class="header__link">申請</a>
 
                 <form method="POST" action="/logout" class="header__logout-form">
                     @csrf

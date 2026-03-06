@@ -73,3 +73,33 @@
     font-weight: 600;
     margin-top: 20px;
 }
+
+@media screen and (min-width: 1400px) and (max-width: 1540px) {
+    .attendance {
+        padding-top: 180px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 850px) {
+    .attendance {
+        padding-top: 140px;
+    }
+
+    .attendance__date {
+        font-size: 26px;
+    }
+
+    .attendance__time {
+        font-size: 48px;
+    }
+
+    .attendance__actions-row {
+        gap: 40px;
+    }
+
+    .attendance__actions button {
+        width: 150px;
+        height: 56px;
+        font-size: 18px;
+    }
+}

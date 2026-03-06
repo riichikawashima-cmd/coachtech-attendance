@@ -1,0 +1,139 @@
+body {
+    background: #f2f2f2;
+    color: #000;
+}
+
+.attendance-detail {
+    width: 900px;
+    margin: 60px auto;
+}
+
+.attendance-detail__heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.attendance-detail__bar {
+    width: 6px;
+    height: 24px;
+    background: #000;
+}
+
+.attendance-detail__card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* ===== table ===== */
+
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detail-table th {
+    width: 160px;
+    text-align: left;
+    font-size: 13px;
+    color: #666;
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+    font-weight: 700;
+    background: #fff;
+}
+
+.detail-table td {
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* 名前 */
+.detail-table__name {
+    font-weight: 700;
+    text-align: center;
+}
+
+/* 日付 */
+.detail-table__date {
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+}
+
+/* 〜 */
+.detail-table__sep {
+    width: 60px;
+    text-align: center;
+    color: #666;
+    font-weight: 700;
+}
+
+/* 時刻カラム */
+.detail-table__time {
+    width: 200px;
+}
+
+/* 時刻ボックス（理想サイズに寄せる） */
+.time-box {
+    display: inline-block;
+    min-width: 70px;
+    text-align: center;
+    padding: 4px 8px;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    background: #fff;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* 備考 */
+.remark-box {
+    width: 240px;
+    height: 46px;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    background: #fff;
+    margin: 0 auto;
+    /* ← 中央 */
+}
+
+/* ===== actions ===== */
+
+.attendance-detail__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.edit-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 3px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* 申請済み（disabled）時の見た目 */
+.time-box:disabled,
+.remark-box:disabled {
+    background: #f3f3f3;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.approval-message {
+    color: #d60000;
+    font-weight: 700;
+    text-align: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}

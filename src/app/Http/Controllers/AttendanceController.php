@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
@@ -29,31 +27,6 @@ class AttendanceController extends Controller
         }
 
         return view('attendance.index', compact('now', 'status'));
-    }
-
-    // 勤怠一覧
-    public function list(Request $request)
-    {
-        $base = now()->locale('ja');
-
-        if ($request->filled('month')) {
-            $base = Carbon::createFromFormat('Y-m', $request->month)->locale('ja');
-        }
-
-        $startOfMonth = $base->copy()->startOfMonth()->toDateString();
-        $endOfMonth   = $base->copy()->endOfMonth()->toDateString();
-
-        $attendances = Attendance::with('breaks')
-            ->where('user_id', Auth::id())
-            ->whereBetween('date', [$startOfMonth, $endOfMonth])
-            ->orderBy('date', 'desc')
-            ->get();
-
-        $monthLabel = $base->format('Y/m');
-        $prevMonth  = $base->copy()->subMonth()->format('Y-m');
-        $nextMonth  = $base->copy()->addMonth()->format('Y-m');
-
-        return view('attendance.list', compact('attendances', 'monthLabel', 'prevMonth', 'nextMonth'));
     }
 
     public function clockIn()

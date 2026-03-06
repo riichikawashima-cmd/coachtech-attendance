@@ -57,9 +57,19 @@
 }
 
 .month-label {
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     font-weight: 700;
-    color: #111827;
+}
+
+.month-label__icon {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: #000;
+    stroke-width: 2;
 }
 
 /* テーブル */

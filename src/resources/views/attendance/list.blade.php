@@ -21,7 +21,13 @@
             </a>
 
             <div class="month-label">
-                {{ $monthLabel }}
+                <svg class="month-label__icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2.5" x2="16" y2="6"></line>
+                    <line x1="8" y1="2.5" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span class="month-label__text">{{ $monthLabel }}</span>
             </div>
 
             <a class="month-btn" href="{{ url('/attendance/list') }}?month={{ $nextMonth }}">
@@ -42,72 +48,64 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($attendances as $attendance)
+                    @foreach ($dates as $day)
+                    @php
+                    $dateKey = $day->toDateString();
+                    $attendance = $attendancesByDate->get($dateKey);
+
+                    $clockInText = $attendance && $attendance->clock_in
+                    ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i')
+                    : '';
+
+                    $clockOutText = $attendance && $attendance->clock_out
+                    ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i')
+                    : '';
+
+                    $breakSeconds = 0;
+
+                    if ($attendance) {
+                    foreach ($attendance->breaks as $b) {
+                    if ($b->break_start && $b->break_end) {
+                    $breakSeconds += \Carbon\Carbon::parse($b->break_start)
+                    ->diffInSeconds(\Carbon\Carbon::parse($b->break_end));
+                    }
+                    }
+                    }
+
+                    $breakMinutes = intdiv($breakSeconds, 60);
+                    $bh = intdiv($breakMinutes, 60);
+                    $bm = $breakMinutes % 60;
+
+                    $breakText = $attendance ? sprintf('%d:%02d', $bh, $bm) : '';
+
+                    $totalText = '';
+                    if ($attendance && $attendance->clock_in && $attendance->clock_out) {
+                    $workSeconds = \Carbon\Carbon::parse($attendance->clock_in)
+                    ->diffInSeconds(\Carbon\Carbon::parse($attendance->clock_out));
+
+                    $netSeconds = max(0, $workSeconds - $breakSeconds);
+                    $netMinutes = intdiv($netSeconds, 60);
+
+                    $th = intdiv($netMinutes, 60);
+                    $tm = $netMinutes % 60;
+
+                    $totalText = sprintf('%d:%02d', $th, $tm);
+                    }
+                    @endphp
+
                     <tr>
-                        <td>{{ \Carbon\Carbon::parse($attendance->date)->isoFormat('MM/DD(ddd)') }}</td>
-
-                        <td>
-                            {{ $attendance->clock_in
-                                    ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i')
-                                    : '' }}
-                        </td>
-
-                        <td>
-                            {{ $attendance->clock_out
-                                    ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i')
-                                    : '' }}
-                        </td>
-
-                        @php
-                        // 休憩は「秒」で合算して、最後に分へ（端数ズレ防止）
-                        $breakSeconds = 0;
-
-                        foreach ($attendance->breaks as $b) {
-                        if ($b->break_start && $b->break_end) {
-                        $breakSeconds += \Carbon\Carbon::parse($b->break_start)
-                        ->diffInSeconds(\Carbon\Carbon::parse($b->break_end));
-                        }
-                        }
-
-                        $breakMinutes = intdiv($breakSeconds, 60);
-                        $bh = intdiv($breakMinutes, 60);
-                        $bm = $breakMinutes % 60;
-                        @endphp
-
-                        {{-- 休憩時間合計 --}}
-                        <td>{{ sprintf('%d:%02d', $bh, $bm) }}</td>
-
-                        {{-- 合計（勤務時間 - 休憩） --}}
-                        <td>
-                            @php
-                            $totalText = '';
-
-                            if ($attendance->clock_in && $attendance->clock_out) {
-                            $workSeconds = \Carbon\Carbon::parse($attendance->clock_in)
-                            ->diffInSeconds(\Carbon\Carbon::parse($attendance->clock_out));
-
-                            $netSeconds = max(0, $workSeconds - $breakSeconds);
-                            $netMinutes = intdiv($netSeconds, 60);
-
-                            $th = intdiv($netMinutes, 60);
-                            $tm = $netMinutes % 60;
-
-                            $totalText = sprintf('%d:%02d', $th, $tm);
-                            }
-                            @endphp
-
-                            {{ $totalText }}
-                        </td>
-
-                        <td>詳細</td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" style="text-align:center; padding: 18px 0;">
-                            データがありません
+                        <td>{{ $day->isoFormat('MM/DD(ddd)') }}</td>
+                        <td>{{ $clockInText }}</td>
+                        <td>{{ $clockOutText }}</td>
+                        <td>{{ $breakText }}</td>
+                        <td>{{ $totalText }}</td>
+                        <td class="detail">
+                            @if ($attendance)
+                            <a href="{{ route('attendance.detail', ['date' => $dateKey]) }}">詳細</a>
+                            @endif
                         </td>
                     </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
