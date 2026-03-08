@@ -8,6 +8,7 @@ use App\Http\Controllers\StampCorrectionRequestController;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminAttendanceController;
 use App\Http\Controllers\Admin\AdminStaffController;
+use App\Http\Controllers\Admin\AdminStampCorrectionRequestController;
 use Illuminate\Support\Facades\Auth;
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -41,26 +42,35 @@ Route::get('/admin/login', [AdminAuthenticatedSessionController::class, 'create'
 Route::post('/admin/login', [AdminAuthenticatedSessionController::class, 'store']);
 
 Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index'])
-    ->middleware(['auth', 'verified']);
+    ->middleware('auth:admin');
 
 Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])
-    ->middleware(['auth', 'verified']);
+    ->middleware('auth:admin');
 
 Route::post('/admin/attendance/{id}', [AdminAttendanceController::class, 'update'])
-    ->middleware(['auth', 'verified']);
+    ->middleware('auth:admin');
 
 Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
-    ->middleware(['auth', 'verified']);
+    ->middleware('auth:admin');
 
 Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'show'])
-    ->middleware(['auth', 'verified']);
+    ->middleware('auth:admin');
 
 Route::get('/admin/attendance/staff/{id}/csv', [AdminStaffController::class, 'csv'])
-    ->middleware(['auth', 'verified']);
+    ->middleware('auth:admin');
 
 Route::post('/admin/logout', function () {
-    Auth::logout();
+    Auth::guard('admin')->logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
     return redirect('/admin/login');
 });
+
+Route::get('/admin/stamp_correction_request/list', [AdminStampCorrectionRequestController::class, 'index'])
+    ->middleware('auth:admin');
+
+Route::get('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestController::class, 'show'])
+    ->middleware('auth:admin');
+
+Route::post('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestController::class, 'approve'])
+    ->middleware('auth:admin');

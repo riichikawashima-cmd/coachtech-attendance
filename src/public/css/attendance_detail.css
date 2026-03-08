@@ -129,3 +129,39 @@ body {
 .time-box::-webkit-calendar-picker-indicator {
     display: none;
 }
+
+@media screen and (max-width: 1540px) {
+    .attendance-detail {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .attendance-detail {
+        width: 95%;
+    }
+
+    .detail-table th {
+        width: 120px;
+        padding: 16px 16px 16px 20px;
+        font-size: 12px;
+    }
+
+    .detail-table td {
+        padding: 16px 12px;
+        font-size: 12px;
+    }
+
+    .detail-table__sep {
+        width: 30px;
+    }
+
+    .time-box {
+        width: 60px;
+        font-size: 12px;
+    }
+
+    .remark-box {
+        width: 180px;
+    }
+}

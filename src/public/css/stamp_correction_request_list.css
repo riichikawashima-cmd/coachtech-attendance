@@ -76,3 +76,31 @@ body {
     padding: 20px;
     color: #666;
 }
+
+/* PC（1400〜1540px） */
+@media screen and (max-width: 1540px) {
+
+    .request-list {
+        width: 90%;
+    }
+
+}
+
+/* タブレット（768〜850px） */
+@media screen and (max-width: 850px) {
+
+    .request-list {
+        width: 95%;
+    }
+
+    .request-list__table th,
+    .request-list__table td {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .request-list__tabs {
+        gap: 20px;
+    }
+
+}

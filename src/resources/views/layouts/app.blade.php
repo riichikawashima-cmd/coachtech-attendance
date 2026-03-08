@@ -17,7 +17,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="COACHTECH">
             </div>
 
-            @if (Auth::check() && request()->is('admin/*') && !request()->is('admin/login'))
+            @if (Auth::guard('admin')->check() && request()->is('admin/*') && !request()->is('admin/login'))
             <nav class="header__nav">
                 <a href="/admin/attendance/list" class="header__link">勤怠一覧</a>
                 <a href="/admin/staff/list" class="header__link">スタッフ一覧</a>

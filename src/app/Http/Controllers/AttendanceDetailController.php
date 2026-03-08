@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
+use App\Models\CorrectionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -36,7 +37,7 @@ class AttendanceDetailController extends Controller
             ->where('date', $date)
             ->firstOrFail();
 
-        if ($attendance->requested_at) {
+        if (CorrectionRequest::where('attendance_id', $attendance->id)->where('status', 'pending')->exists()) {
             return redirect()->back()->withErrors(['※承認待ちのため修正はできません※']);
         }
 
@@ -69,6 +70,7 @@ class AttendanceDetailController extends Controller
             if (($p['s'] && !$p['e']) || (!$p['s'] && $p['e'])) {
                 return redirect()->back()->withErrors(['休憩時間が不適切な値です'])->withInput();
             }
+
             if ($p['s'] && $p['e'] && strtotime($p['s']) >= strtotime($p['e'])) {
                 return redirect()->back()->withErrors(['休憩時間が不適切な値です'])->withInput();
             }
@@ -92,36 +94,14 @@ class AttendanceDetailController extends Controller
             }
         }
 
-        $attendance->update([
-            'clock_in'     => Carbon::parse($date . ' ' . $request->clock_in),
-            'clock_out'    => Carbon::parse($date . ' ' . $request->clock_out),
-            'remark'       => $request->remark,
-            'requested_at' => now(),
+        CorrectionRequest::create([
+            'attendance_id'       => $attendance->id,
+            'user_id'             => Auth::id(),
+            'requested_clock_in'  => Carbon::parse($date . ' ' . $request->clock_in),
+            'requested_clock_out' => Carbon::parse($date . ' ' . $request->clock_out),
+            'requested_note'      => $request->remark,
+            'status'              => 'pending',
         ]);
-
-        $breaks = $attendance->breaks()->orderBy('break_start')->get();
-
-        $breakInputs = [
-            ['start' => $request->break1_start, 'end' => $request->break1_end],
-            ['start' => $request->break2_start, 'end' => $request->break2_end],
-        ];
-
-        foreach ($breakInputs as $i => $bi) {
-            if (!$bi['start'] && !$bi['end']) {
-                continue;
-            }
-
-            $data = [
-                'break_start' => Carbon::parse($date . ' ' . $bi['start']),
-                'break_end'   => Carbon::parse($date . ' ' . $bi['end']),
-            ];
-
-            if (isset($breaks[$i])) {
-                $breaks[$i]->update($data);
-            } else {
-                $attendance->breaks()->create($data);
-            }
-        }
 
         return redirect()->route('attendance.list');
     }
