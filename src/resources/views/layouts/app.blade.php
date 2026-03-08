@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>@yield('title')</title>
+
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
     @yield('css')
 </head>
@@ -16,7 +17,21 @@
                 <img src="{{ asset('images/logo.png') }}" alt="COACHTECH">
             </div>
 
-            @auth
+            @if (Auth::check() && request()->is('admin/*') && !request()->is('admin/login'))
+            <nav class="header__nav">
+                <a href="/admin/attendance/list" class="header__link">勤怠一覧</a>
+                <a href="/admin/staff/list" class="header__link">スタッフ一覧</a>
+                <a href="/admin/stamp_correction_request/list" class="header__link">申請一覧</a>
+
+                <form method="POST" action="/admin/logout" class="header__logout-form">
+                    @csrf
+                    <button type="submit" class="header__link header__logout-button">
+                        ログアウト
+                    </button>
+                </form>
+            </nav>
+
+            @elseif (Auth::check() && !request()->is('admin/*'))
             <nav class="header__nav">
                 <a href="{{ route('attendance.index') }}" class="header__link">勤怠</a>
                 <a href="{{ route('attendance.list') }}" class="header__link">勤怠一覧</a>
@@ -29,7 +44,7 @@
                     </button>
                 </form>
             </nav>
-            @endauth
+            @endif
         </div>
     </header>
 

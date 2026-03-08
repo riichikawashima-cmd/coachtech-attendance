@@ -16,7 +16,7 @@
         </h2>
 
         <div class="attendance-list__month-nav">
-            <a class="month-btn" href="{{ url('/attendance/list') }}?month={{ $prevMonth }}">
+            <a class="month-btn" href="{{ url('/admin/attendance/staff/' . request()->route('id')) }}?month={{ \Carbon\Carbon::parse(request('month', now()->format('Y-m')))->subMonth()->format('Y-m') }}">
                 ← 前月
             </a>
 
@@ -27,10 +27,10 @@
                     <line x1="8" y1="2.5" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                <span class="month-label__text">{{ $monthLabel }}</span>
+                <span class="month-label__text">{{ \Carbon\Carbon::parse(request('month', now()->format('Y-m')) . '-01')->format('Y/m') }}</span>
             </div>
 
-            <a class="month-btn" href="{{ url('/attendance/list') }}?month={{ $nextMonth }}">
+            <a class="month-btn" href="{{ url('/admin/attendance/staff/' . request()->route('id')) }}?month={{ \Carbon\Carbon::parse(request('month', now()->format('Y-m')))->addMonth()->format('Y-m') }}">
                 翌月 →
             </a>
         </div>
@@ -64,19 +64,16 @@
                     $breakSeconds = 0;
 
                     if ($attendance) {
-                    foreach ($attendance->breaks as $b) {
-                    if ($b->break_start && $b->break_end) {
-                    $breakSeconds += \Carbon\Carbon::parse($b->break_start)
-                    ->diffInSeconds(\Carbon\Carbon::parse($b->break_end));
+                    foreach ($attendance->breaks as $break) {
+                    if ($break->break_start && $break->break_end) {
+                    $breakSeconds += \Carbon\Carbon::parse($break->break_start)
+                    ->diffInSeconds(\Carbon\Carbon::parse($break->break_end));
                     }
                     }
                     }
 
                     $breakMinutes = intdiv($breakSeconds, 60);
-                    $bh = intdiv($breakMinutes, 60);
-                    $bm = $breakMinutes % 60;
-
-                    $breakText = $attendance ? sprintf('%d:%02d', $bh, $bm) : '';
+                    $breakText = $attendance ? sprintf('%d:%02d', intdiv($breakMinutes, 60), $breakMinutes % 60) : '';
 
                     $totalText = '';
                     if ($attendance && $attendance->clock_in && $attendance->clock_out) {
@@ -86,13 +83,9 @@
                     $netSeconds = max(0, $workSeconds - $breakSeconds);
                     $netMinutes = intdiv($netSeconds, 60);
 
-                    $th = intdiv($netMinutes, 60);
-                    $tm = $netMinutes % 60;
-
-                    $totalText = sprintf('%d:%02d', $th, $tm);
+                    $totalText = sprintf('%d:%02d', intdiv($netMinutes, 60), $netMinutes % 60);
                     }
                     @endphp
-
                     <tr>
                         <td>{{ $day->isoFormat('MM/DD(ddd)') }}</td>
                         <td>{{ $clockInText }}</td>
@@ -100,12 +93,21 @@
                         <td>{{ $breakText }}</td>
                         <td>{{ $totalText }}</td>
                         <td class="detail">
-                            <a href="{{ route('attendance.detail', ['date' => $dateKey]) }}">詳細</a>
+                            @if ($attendance)
+                            <a href="{{ url('/admin/attendance/' . $attendance->id) }}">詳細</a>
+                            @endif
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        <div class="staff-attendance__csv">
+            <a class="staff-attendance__csv-button"
+                href="{{ url('/admin/attendance/staff/' . request()->route('id') . '/csv') }}?month={{ request('month', now()->format('Y-m')) }}">
+                CSV出力
+            </a>
         </div>
 
     </div>

@@ -67,7 +67,7 @@
             @endif
 
             @if ($status === '退勤済')
-            <p class="attendance__thanks">お疲れさまでした。</p>
+            <p class="attendance__thanks">お疲れ様でした。</p>
             @endif
 
         </div>

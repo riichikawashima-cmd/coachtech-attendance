@@ -1,0 +1,123 @@
+body {
+    background: #f1f1f1;
+    margin: 0;
+    font-family: "Noto Sans JP", sans-serif;
+}
+
+.attendance-list {
+    width: min(900px, calc(100% - 40px));
+    margin: 60px auto;
+}
+
+.attendance-list__title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    padding-left: 16px;
+    border-left: 6px solid #000;
+}
+
+.attendance-list__nav {
+    margin-bottom: 30px;
+    background: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.attendance-list__nav a {
+    text-decoration: none;
+    color: #666;
+}
+
+.attendance-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.calendar-icon {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.calendar-icon::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 18px;
+    height: 5px;
+    background: #000;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.attendance-table {
+    width: 100%;
+    min-width: 700px;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.attendance-table th,
+.attendance-table td {
+    padding: 16px 32px;
+    border-bottom: 1px solid #e5e5e5;
+    font-size: 14px;
+}
+
+.attendance-table th {
+    color: #666;
+    font-weight: 700;
+    text-align: center;
+}
+
+.attendance-table td {
+    text-align: center;
+    color: #666;
+    font-weight: 600;
+}
+
+.attendance-table td a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.attendance-table th:nth-child(1),
+.attendance-table td:nth-child(1) {
+    width: 20%;
+}
+
+.attendance-table th:nth-child(6),
+.attendance-table td:nth-child(6) {
+    width: 12%;
+}
+
+.attendance-table-wrapper {
+    overflow-x: auto;
+}
+
+@media (max-width: 850px) {
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 14px 16px;
+        font-size: 13px;
+    }
+
+    .attendance-list__title {
+        font-size: 20px;
+    }
+
+}

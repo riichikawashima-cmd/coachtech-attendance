@@ -4,10 +4,9 @@ body {
 }
 
 .attendance-detail {
-    width: 900px;
+    width: min(900px, calc(100% - 40px));
     margin: 60px auto;
 }
-
 .attendance-detail__heading {
     display: flex;
     align-items: center;
@@ -28,7 +27,6 @@ body {
     border-radius: 8px;
     overflow: hidden;
 }
-
 
 .detail-table {
     width: 100%;
@@ -112,20 +110,31 @@ body {
     cursor: pointer;
 }
 
-.time-box:disabled,
-.remark-box:disabled {
-    background: #f3f3f3;
-    color: #666;
-    cursor: not-allowed;
-}
-
-.approval-message {
-    color: #d60000;
-    font-weight: 700;
-    text-align: right;
-    padding: 16px 0;
-}
-
 .time-box::-webkit-calendar-picker-indicator {
     display: none;
+}
+
+@media (max-width: 850px) {
+
+    .attendance-detail {
+        margin: 40px auto;
+    }
+
+    .detail-table th {
+        padding: 16px 16px 16px 20px;
+        font-size: 12px;
+    }
+
+    .detail-table td {
+        padding: 16px;
+    }
+
+    .time-box {
+        width: 70px;
+    }
+
+    .remark-box {
+        width: 100%;
+    }
+
 }

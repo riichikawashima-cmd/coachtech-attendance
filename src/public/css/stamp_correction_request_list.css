@@ -34,10 +34,10 @@ body {
     padding-bottom: 8px;
     cursor: pointer;
     color: #666;
+    text-decoration: none;
 }
 
 .tab--active {
-    border-bottom: 3px solid #000;
     color: #000;
 }
 

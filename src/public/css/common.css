@@ -1,10 +1,10 @@
 body {
     margin: 0;
+    padding: 0;
     background: #f2f2f2;
     font-family: sans-serif;
 }
 
-/* ===== Header (強めに固定) ===== */
 .header {
     background: #000;
     height: 80px;
@@ -21,27 +21,20 @@ body {
     align-items: center;
 }
 
-/* 左ロゴ */
 .header .header__logo img {
     height: 28px;
     display: block;
 }
 
-/* 右ナビ */
 .header .header__nav {
     margin-left: auto;
-    /* 右寄せを確定 */
     display: flex;
-    /* 横並びを確定 */
     align-items: center;
     gap: 45px;
     flex-wrap: nowrap;
-    /* 折り返し禁止 */
     white-space: nowrap;
-    /* 文字折り返し禁止 */
 }
 
-/* a と button を同じ見た目に */
 .header .header__nav a.header__link,
 .header .header__nav button.header__link {
     color: #fff;
@@ -56,13 +49,11 @@ body {
 
     cursor: pointer;
     display: inline-block;
-    /* 安定 */
     line-height: 1;
 }
 
 .header .header__nav a.header__link:visited {
     color: #fff;
-    /* visited で紫になる対策 */
 }
 
 .header .header__nav a.header__link:hover,
@@ -70,10 +61,8 @@ body {
     opacity: 0.7;
 }
 
-/* form が flex で崩さないように */
 .header .header__logout-form {
     margin: 0;
     display: flex;
-    /* “flexの子”として安定 */
     align-items: center;
 }
