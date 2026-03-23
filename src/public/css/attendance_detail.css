@@ -12,14 +12,14 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 36px;
 }
 
 .attendance-detail__bar {
     width: 6px;
-    height: 24px;
+    height: 28px;
     background: #000;
 }
 
@@ -29,85 +29,133 @@ body {
     overflow: hidden;
 }
 
-
 .detail-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.detail-table .col-label {
+    width: 140px;
+}
+
+.detail-table .col-left {
+    width: 156px;
+}
+
+.detail-table .col-sep {
+    width: 48px;
+}
+
+.detail-table .col-right {
+    width: 156px;
 }
 
 .detail-table th {
-    width: 160px;
-    text-align: left;
+    padding: 20px 0 20px 42px;
+    border-bottom: 1px solid #e5e5e5;
     font-size: 13px;
-    color: #666;
-    padding: 20px 24px 20px 56px;
-    border-bottom: 1px solid #eee;
     font-weight: 700;
+    color: #666;
+    text-align: left;
+    vertical-align: middle;
     background: #fff;
+    white-space: nowrap;
 }
 
 .detail-table td {
-    padding: 20px 40px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
     vertical-align: middle;
 }
 
 .detail-table__name {
+    padding-left: 44px;
     font-weight: 700;
-    text-align: center;
+    font-size: 14px;
+    text-align: left;
 }
 
 .detail-table__date {
+    padding-left: 44px;
     font-weight: 700;
     font-size: 13px;
-    text-align: center;
-}
-
-.detail-table__sep {
-    width: 60px;
-    text-align: center;
-    color: #666;
-    font-weight: 700;
+    text-align: left;
 }
 
 .detail-table__time {
-    width: 200px;
-    padding-left: 10px;
+    padding-left: 44px;
+    text-align: left;
+}
+
+.detail-table__sep {
+    position: relative;
+    padding: 20px 0;
+    vertical-align: middle;
+}
+
+.detail-table__sep--mark::after {
+    content: "〜";
+    position: absolute;
+    left: -70px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.detail-table__remark {
+    padding: 16px 0 16px 44px;
+    text-align: left;
 }
 
 .time-box {
-    width: 80px;
-    height: 28px;
-    text-align: center;
-    border: 1px solid #e5e5e5;
+    width: 68px;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #d9d9d9;
     border-radius: 3px;
     background: #fff;
-    font-weight: 700;
+    text-align: center;
     font-size: 13px;
+    font-weight: 700;
+    line-height: 20px;
+    box-sizing: border-box;
+    vertical-align: middle;
 }
 
 .remark-box {
-    width: 240px;
-    height: 46px;
-    border: 1px solid #e5e5e5;
+    width: 210px;
+    height: 48px;
+    padding: 10px 12px;
+    margin: 0;
+    border: 1px solid #d9d9d9;
     border-radius: 3px;
     background: #fff;
     resize: none;
+    font-size: 13px;
+    font-weight: 700;
+    box-sizing: border-box;
+    display: block;
 }
 
 .attendance-detail__actions {
+    width: 900px;
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin: 28px auto 0;
 }
 
 .edit-btn {
+    min-width: 84px;
     background: #000;
     color: #fff;
     border: none;
-    padding: 10px 24px;
-    border-radius: 3px;
+    padding: 10px 0;
+    border-radius: 4px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -126,14 +174,17 @@ body {
     padding: 16px 0;
 }
 
-.time-box::-webkit-calendar-picker-indicator {
-    display: none;
+.input-error {
+    margin-top: 6px;
+    color: #d60000;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: left;
 }
 
-@media screen and (max-width: 1540px) {
-    .attendance-detail {
-        width: 90%;
-    }
+.time-box::-webkit-calendar-picker-indicator {
+    display: none;
 }
 
 @media screen and (max-width: 850px) {
@@ -141,19 +192,39 @@ body {
         width: 95%;
     }
 
+    .attendance-detail__actions {
+        width: 95%;
+    }
+
+    .detail-table {
+        table-layout: auto;
+    }
+
+    .detail-table .col-label,
+    .detail-table .col-left,
+    .detail-table .col-sep,
+    .detail-table .col-right {
+        width: auto;
+    }
+
     .detail-table th {
-        width: 120px;
-        padding: 16px 16px 16px 20px;
+        padding: 16px 0 16px 18px;
         font-size: 12px;
     }
 
     .detail-table td {
-        padding: 16px 12px;
-        font-size: 12px;
+        padding: 16px 0;
     }
 
-    .detail-table__sep {
-        width: 30px;
+    .detail-table__name,
+    .detail-table__date,
+    .detail-table__time,
+    .detail-table__remark {
+        padding-left: 18px;
+    }
+
+    .detail-table__sep--mark::after {
+        font-size: 16px;
     }
 
     .time-box {

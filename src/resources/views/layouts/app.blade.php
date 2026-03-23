@@ -17,7 +17,7 @@
                 <img src="{{ asset('images/logo.png') }}" alt="COACHTECH">
             </div>
 
-            @if (Auth::guard('admin')->check() && request()->is('admin/*') && !request()->is('admin/login'))
+            @if (Auth::guard('admin')->check())
             <nav class="header__nav">
                 <a href="/admin/attendance/list" class="header__link">勤怠一覧</a>
                 <a href="/admin/staff/list" class="header__link">スタッフ一覧</a>
@@ -31,7 +31,7 @@
                 </form>
             </nav>
 
-            @elseif (Auth::check() && !request()->is('admin/*'))
+            @elseif (Auth::check() && !request()->is('admin/*') && !request()->is('email/verify'))
             <nav class="header__nav">
                 <a href="{{ route('attendance.index') }}" class="header__link">勤怠</a>
                 <a href="{{ route('attendance.list') }}" class="header__link">勤怠一覧</a>

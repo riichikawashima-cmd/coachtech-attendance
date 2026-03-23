@@ -44,17 +44,16 @@ $tab = request('tab', 'pending'); // pending / approved
                     </tr>
                 </thead>
                 <tbody>
-
                     @if($tab === 'pending')
                     @forelse ($pendingRequests as $r)
                     <tr>
                         <td>承認待ち</td>
                         <td>{{ Auth::user()->name }}</td>
-                        <td>{{ \Carbon\Carbon::parse($r->date)->format('Y/m/d') }}</td>
-                        <td>{{ $r->note ?? '' }}</td>
-                        <td>{{ $r->requested_at ? \Carbon\Carbon::parse($r->requested_at)->format('Y/m/d') : '' }}</td>
+                        <td>{{ $r->attendance ? \Carbon\Carbon::parse($r->attendance->date)->format('Y/m/d') : '' }}</td>
+                        <td>{{ $r->requested_note ?? '' }}</td>
+                        <td>{{ $r->created_at ? \Carbon\Carbon::parse($r->created_at)->format('Y/m/d') : '' }}</td>
                         <td class="detail">
-                            <a href="{{ route('attendance.detail', ['date' => $r->date]) }}">詳細</a>
+                            <a href="{{ route('attendance.detail', ['date' => $r->attendance->date]) }}">詳細</a>
                         </td>
                     </tr>
                     @empty
@@ -67,11 +66,11 @@ $tab = request('tab', 'pending'); // pending / approved
                     <tr>
                         <td>承認済み</td>
                         <td>{{ Auth::user()->name }}</td>
-                        <td>{{ \Carbon\Carbon::parse($r->date)->format('Y/m/d') }}</td>
-                        <td>{{ $r->note ?? '' }}</td>
-                        <td>{{ $r->requested_at ? \Carbon\Carbon::parse($r->requested_at)->format('Y/m/d') : '' }}</td>
+                        <td>{{ $r->attendance ? \Carbon\Carbon::parse($r->attendance->date)->format('Y/m/d') : '' }}</td>
+                        <td>{{ $r->requested_note ?? '' }}</td>
+                        <td>{{ $r->created_at ? \Carbon\Carbon::parse($r->created_at)->format('Y/m/d') : '' }}</td>
                         <td class="detail">
-                            <a href="{{ route('attendance.detail', ['date' => $r->date]) }}">詳細</a>
+                            <a href="{{ route('attendance.detail', ['date' => $r->attendance->date]) }}">詳細</a>
                         </td>
                     </tr>
                     @empty
@@ -80,7 +79,6 @@ $tab = request('tab', 'pending'); // pending / approved
                     </tr>
                     @endforelse
                     @endif
-
                 </tbody>
             </table>
         </div>

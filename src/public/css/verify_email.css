@@ -1,0 +1,44 @@
+body {
+    background: #ffffff;
+}
+
+.verify-email {
+    width: 100%;
+    margin-top: 180px;
+    text-align: center;
+}
+
+.verify-email__text {
+    margin: 0 0 40px;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.8;
+    color: #000;
+    white-space: nowrap;
+}
+
+.verify-email__mailhog {
+    display: inline-block;
+    padding: 16px 32px;
+    border: 1px solid #000;
+    background: #d9d9d9;
+    color: #000;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    border-radius: 4px;
+}
+
+.verify-email__resend {
+    margin-top: 40px;
+}
+
+.verify-email__resend button {
+    background: none;
+    border: none;
+    color: #1e90ff;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+}

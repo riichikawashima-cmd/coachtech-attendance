@@ -76,7 +76,11 @@
                     $bh = intdiv($breakMinutes, 60);
                     $bm = $breakMinutes % 60;
 
-                    $breakText = $attendance ? sprintf('%d:%02d', $bh, $bm) : '';
+                    $hasWorkTime = $attendance && ($attendance->clock_in || $attendance->clock_out);
+
+                    $breakText = $hasWorkTime
+                    ? sprintf('%d:%02d', $bh, $bm)
+                    : '';
 
                     $totalText = '';
                     if ($attendance && $attendance->clock_in && $attendance->clock_out) {

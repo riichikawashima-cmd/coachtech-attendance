@@ -70,7 +70,9 @@ Route::get('/admin/stamp_correction_request/list', [AdminStampCorrectionRequestC
     ->middleware('auth:admin');
 
 Route::get('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestController::class, 'show'])
-    ->middleware('auth:admin');
+    ->middleware('auth:admin')
+    ->name('admin.stamp_correction_request.show');
 
 Route::post('/stamp_correction_request/approve/{id}', [AdminStampCorrectionRequestController::class, 'approve'])
-    ->middleware('auth:admin');
+    ->middleware('auth:admin')
+    ->name('admin.stamp_correction_request.approve');

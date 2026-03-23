@@ -21,9 +21,17 @@ class AttendanceDetailController extends Controller
             ->where('date', $date)
             ->first();
 
+        $isLocked = false;
+
+        if ($attendance) {
+            $isLocked = CorrectionRequest::where('attendance_id', $attendance->id)
+                ->where('status', 'pending')
+                ->exists();
+        }
+
         $day = Carbon::parse($date)->locale('ja');
 
-        return view('attendance.detail', compact('attendance', 'day'));
+        return view('attendance.detail', compact('attendance', 'day', 'isLocked'));
     }
 
     public function apply(Request $request, $date)
@@ -32,69 +40,89 @@ class AttendanceDetailController extends Controller
             abort(404);
         }
 
-        $attendance = Attendance::with('breaks')
-            ->where('user_id', Auth::id())
-            ->where('date', $date)
-            ->firstOrFail();
+        $attendance = Attendance::firstOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'date' => $date,
+            ]
+        );
+
+        $attendance->load('breaks');
 
         if (CorrectionRequest::where('attendance_id', $attendance->id)->where('status', 'pending')->exists()) {
             return redirect()->back()->withErrors(['※承認待ちのため修正はできません※']);
         }
 
-        $request->validate([
-            'clock_in'      => ['required'],
-            'clock_out'     => ['required'],
-            'break1_start'  => ['nullable'],
-            'break1_end'    => ['nullable'],
-            'break2_start'  => ['nullable'],
-            'break2_end'    => ['nullable'],
-            'remark'        => ['required', 'string', 'max:255'],
-        ], [
-            'clock_in.required'  => '出勤時間もしくは退勤時間が不適切な値です',
-            'clock_out.required' => '出勤時間もしくは退勤時間が不適切な値です',
-            'remark.required'    => '備考を記入してください',
-        ]);
+        $errors = [];
 
-        if (strtotime($request->clock_in) >= strtotime($request->clock_out)) {
+        if (!$request->clock_in || !$request->clock_out) {
+            $errors['clock_in'] = '出勤時間もしくは退勤時間が不適切な値です';
+        }
+
+        if ($request->clock_in && $request->clock_out && strtotime($request->clock_in) >= strtotime($request->clock_out)) {
+            $errors['clock_in'] = '出勤時間もしくは退勤時間が不適切な値です';
+        }
+
+        if (!$request->remark) {
+            $errors['remark'] = '備考を記入してください';
+        }
+
+        if (!empty($errors)) {
             return redirect()->back()
-                ->withErrors(['出勤時間もしくは退勤時間が不適切な値です'])
+                ->withErrors($errors)
                 ->withInput();
         }
 
-        $pairs = [
-            ['s' => $request->break1_start, 'e' => $request->break1_end],
-            ['s' => $request->break2_start, 'e' => $request->break2_end],
-        ];
+        $pairs = [];
+        $index = 1;
 
-        foreach ($pairs as $p) {
-            if (($p['s'] && !$p['e']) || (!$p['s'] && $p['e'])) {
-                return redirect()->back()->withErrors(['休憩時間が不適切な値です'])->withInput();
-            }
-
-            if ($p['s'] && $p['e'] && strtotime($p['s']) >= strtotime($p['e'])) {
-                return redirect()->back()->withErrors(['休憩時間が不適切な値です'])->withInput();
-            }
+        while ($request->has("break{$index}_start") || $request->has("break{$index}_end")) {
+            $pairs[] = [
+                'start_key' => "break{$index}_start",
+                'end_key'   => "break{$index}_end",
+            ];
+            $index++;
         }
 
-        $workStart = strtotime($request->clock_in);
-        $workEnd   = strtotime($request->clock_out);
+        foreach ($pairs as $pair) {
+            $start = $request->input($pair['start_key']);
+            $end   = $request->input($pair['end_key']);
 
-        foreach ($pairs as $p) {
-            if (!$p['s'] && !$p['e']) {
-                continue;
+            if (($start && !$end) || (!$start && $end)) {
+                return redirect()->back()
+                    ->withErrors([$pair['start_key'] => '休憩時間が不適切な値です'])
+                    ->withInput();
             }
 
-            $bs = strtotime($p['s']);
-            $be = strtotime($p['e']);
-
-            if ($bs < $workStart || $be > $workEnd) {
+            if ($start && $end && strtotime($start) >= strtotime($end)) {
                 return redirect()->back()
-                    ->withErrors(['休憩時間が勤務時間外です'])
+                    ->withErrors([$pair['start_key'] => '休憩時間が不適切な値です'])
                     ->withInput();
             }
         }
 
-        CorrectionRequest::create([
+        $workStart = strtotime($request->clock_in);
+        $workEnd = strtotime($request->clock_out);
+
+        foreach ($pairs as $pair) {
+            $start = $request->input($pair['start_key']);
+            $end   = $request->input($pair['end_key']);
+
+            if (!$start && !$end) {
+                continue;
+            }
+
+            $breakStart = strtotime($start);
+            $breakEnd   = strtotime($end);
+
+            if ($breakStart < $workStart || $breakEnd > $workEnd) {
+                return redirect()->back()
+                    ->withErrors([$pair['start_key'] => '休憩時間が勤務時間外です'])
+                    ->withInput();
+            }
+        }
+
+        $correctionRequest = CorrectionRequest::create([
             'attendance_id'       => $attendance->id,
             'user_id'             => Auth::id(),
             'requested_clock_in'  => Carbon::parse($date . ' ' . $request->clock_in),
@@ -102,6 +130,30 @@ class AttendanceDetailController extends Controller
             'requested_note'      => $request->remark,
             'status'              => 'pending',
         ]);
+
+        $breaks = [];
+        $index = 1;
+
+        while ($request->has("break{$index}_start") || $request->has("break{$index}_end")) {
+            $start = $request->input("break{$index}_start");
+            $end   = $request->input("break{$index}_end");
+
+            if ($start && $end) {
+                $breaks[] = [
+                    'start' => $start,
+                    'end'   => $end,
+                ];
+            }
+
+            $index++;
+        }
+
+        foreach ($breaks as $b) {
+            $correctionRequest->breaks()->create([
+                'break_start' => Carbon::parse($date . ' ' . $b['start']),
+                'break_end'   => Carbon::parse($date . ' ' . $b['end']),
+            ]);
+        }
 
         return redirect()->route('attendance.list');
     }

@@ -20,23 +20,19 @@
 
             <div class="attendance-detail__card">
 
-                @if ($errors->any())
-                <div class="approval-message">
-                    @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                    @endforeach
-                </div>
-                @endif
-
                 @php
                 $isLocked = $attendance && $attendance->requested_at;
-
                 $breaks = $attendance ? $attendance->breaks : collect();
-                $break1 = $breaks->get(0);
-                $break2 = $breaks->get(1);
                 @endphp
 
                 <table class="detail-table">
+                    <colgroup>
+                        <col class="col-label">
+                        <col class="col-left">
+                        <col class="col-sep">
+                        <col class="col-right">
+                    </colgroup>
+
                     <tr>
                         <th>名前</th>
                         <td class="detail-table__name" colspan="3">
@@ -54,66 +50,84 @@
                     <tr>
                         <th>出勤・退勤</th>
                         <td class="detail-table__time">
-                            <input type="text" class="time-box" name="clock_in"
-                                value="{{ $attendance && $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}"
+                            <input
+                                type="text"
+                                class="time-box time-input"
+                                name="clock_in"
+                                value="{{ old('clock_in', $attendance && $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
                                 @if($isLocked) disabled @endif>
+                            @error('clock_in')
+                            <div class="input-error">{{ $message }}</div>
+                            @enderror
                         </td>
-                        <td class="detail-table__sep">〜</td>
+                        <td class="detail-table__sep detail-table__sep--mark"></td>
                         <td class="detail-table__time">
-                            <input type="text" class="time-box" name="clock_out"
-                                value="{{ $attendance && $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}"
+                            <input
+                                type="text"
+                                class="time-box time-input"
+                                name="clock_out"
+                                value="{{ old('clock_out', $attendance && $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
                                 @if($isLocked) disabled @endif>
+                            @error('clock_out')
+                            <div class="input-error">{{ $message }}</div>
+                            @enderror
                         </td>
                     </tr>
 
-                    <tr>
-                        <th>休憩</th>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break1_start"
-                                value="{{ $break1 && $break1->break_start ? \Carbon\Carbon::parse($break1->break_start)->format('H:i') : '' }}"
-                                @if($isLocked) disabled @endif>
-                        </td>
-                        <td class="detail-table__sep">〜</td>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break1_end"
-                                value="{{ $break1 && $break1->break_end ? \Carbon\Carbon::parse($break1->break_end)->format('H:i') : '' }}"
-                                @if($isLocked) disabled @endif>
-                        </td>
-                    </tr>
+                    @php
+                    $breakCount = $breaks->count() + 1;
+                    @endphp
 
-                    <tr>
-                        <th>休憩2</th>
+                    @for ($i = 0; $i < $breakCount; $i++)
+                        <tr>
+                        <th>休憩{{ $i + 1 }}</th>
                         <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break2_start"
-                                value="{{ $break2 && $break2->break_start ? \Carbon\Carbon::parse($break2->break_start)->format('H:i') : '' }}"
+                            <input
+                                type="text"
+                                class="time-box time-input"
+                                name="break{{ $i + 1 }}_start"
+                                value="{{ old('break' . ($i + 1) . '_start', isset($breaks[$i]) && $breaks[$i]->break_start ? \Carbon\Carbon::parse($breaks[$i]->break_start)->format('H:i') : '') }}"
                                 @if($isLocked) disabled @endif>
+                            @error('break' . ($i + 1) . '_start')
+                            <div class="input-error">{{ $message }}</div>
+                            @enderror
                         </td>
-                        <td class="detail-table__sep">〜</td>
+                        <td class="detail-table__sep detail-table__sep--mark"></td>
                         <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break2_end"
-                                value="{{ $break2 && $break2->break_end ? \Carbon\Carbon::parse($break2->break_end)->format('H:i') : '' }}"
+                            <input
+                                type="text"
+                                class="time-box time-input"
+                                name="break{{ $i + 1 }}_end"
+                                value="{{ old('break' . ($i + 1) . '_end', isset($breaks[$i]) && $breaks[$i]->break_end ? \Carbon\Carbon::parse($breaks[$i]->break_end)->format('H:i') : '') }}"
                                 @if($isLocked) disabled @endif>
+                            @error('break' . ($i + 1) . '_end')
+                            <div class="input-error">{{ $message }}</div>
+                            @enderror
                         </td>
-                    </tr>
+                        </tr>
+                        @endfor
 
-                    <tr>
-                        <th>備考</th>
-                        <td colspan="3">
-                            <textarea class="remark-box" name="remark" @if($isLocked) disabled @endif>{{ $attendance->remark ?? '' }}</textarea>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>備考</th>
+                            <td colspan="3" class="detail-table__remark">
+                                <textarea class="remark-box" name="remark" @if($isLocked) disabled @endif>{{ old('remark', $attendance->remark ?? '') }}</textarea>
+                                @error('remark')
+                                <div class="input-error">{{ $message }}</div>
+                                @enderror
+                            </td>
+                        </tr>
                 </table>
 
             </div>
 
             <div class="attendance-detail__actions">
-                @if ($attendance && !$attendance->requested_at)
+                @if (!$isLocked)
                 <button type="submit" class="edit-btn">修正</button>
                 @endif
             </div>
         </form>
 
-        @if ($attendance && $attendance->requested_at)
+        @if ($isLocked)
         <div class="approval-message">
             ※承認待ちのため修正はできません。
         </div>
@@ -121,4 +135,19 @@
 
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.time-input').forEach(input => {
+        input.addEventListener('input', function() {
+            let v = this.value.replace(/[^0-9]/g, '');
+
+            if (v.length >= 3) {
+                this.value = v.slice(0, 2) + ':' + v.slice(2, 4);
+            } else {
+                this.value = v;
+            }
+        });
+    });
+</script>
+
 @endsection

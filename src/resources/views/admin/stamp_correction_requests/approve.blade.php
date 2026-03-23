@@ -17,14 +17,12 @@
 
         @php
         $attendance = $request->attendance;
-        $breaks = $attendance ? $attendance->breaks : collect();
-        $break1 = $breaks->get(0);
-        $break2 = $breaks->get(1);
         $day = \Carbon\Carbon::parse($attendance->date)->locale('ja');
         $isApproved = $request->status === 'approved';
+        $requestBreaks = $request->breaks ?? collect();
         @endphp
 
-        <form method="POST" action="/stamp_correction_request/approve/{{ $request->id }}">
+        <form method="POST" action="{{ route('admin.stamp_correction_request.approve', $request->id) }}">
             @csrf
 
             <div class="attendance-detail__card">
@@ -58,35 +56,22 @@
                         </td>
                     </tr>
 
+                    @foreach ($requestBreaks as $index => $break)
                     <tr>
-                        <th>休憩</th>
+                        <th>休憩{{ $index + 1 }}</th>
                         <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break1_start"
-                                value="{{ $break1 && $break1->break_start ? \Carbon\Carbon::parse($break1->break_start)->format('H:i') : '' }}"
+                            <input type="text" class="time-box" name="break{{ $index + 1 }}_start"
+                                value="{{ $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '' }}"
                                 readonly>
                         </td>
                         <td class="detail-table__sep">〜</td>
                         <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break1_end"
-                                value="{{ $break1 && $break1->break_end ? \Carbon\Carbon::parse($break1->break_end)->format('H:i') : '' }}"
+                            <input type="text" class="time-box" name="break{{ $index + 1 }}_end"
+                                value="{{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '' }}"
                                 readonly>
                         </td>
                     </tr>
-
-                    <tr>
-                        <th>休憩2</th>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break2_start"
-                                value="{{ $break2 && $break2->break_start ? \Carbon\Carbon::parse($break2->break_start)->format('H:i') : '' }}"
-                                readonly>
-                        </td>
-                        <td class="detail-table__sep">〜</td>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="break2_end"
-                                value="{{ $break2 && $break2->break_end ? \Carbon\Carbon::parse($break2->break_end)->format('H:i') : '' }}"
-                                readonly>
-                        </td>
-                    </tr>
+                    @endforeach
 
                     <tr>
                         <th>備考</th>

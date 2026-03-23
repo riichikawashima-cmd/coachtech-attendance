@@ -28,4 +28,9 @@ class CorrectionRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function breaks()
+    {
+        return $this->hasMany(\App\Models\CorrectionRequestBreak::class);
+    }
 }

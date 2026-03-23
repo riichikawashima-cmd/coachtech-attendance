@@ -28,7 +28,7 @@ class AdminStampCorrectionRequestController extends Controller
 
     public function show($id)
     {
-        $request = CorrectionRequest::with(['user', 'attendance.breaks'])
+        $request = CorrectionRequest::with(['user', 'attendance.breaks', 'breaks'])
             ->findOrFail($id);
 
         return view('admin.stamp_correction_requests.approve', compact('request'));
@@ -36,14 +36,25 @@ class AdminStampCorrectionRequestController extends Controller
 
     public function approve($id)
     {
-        $request = CorrectionRequest::with('attendance')
+        $request = CorrectionRequest::with(['attendance.breaks', 'breaks'])
             ->findOrFail($id);
 
-        $request->attendance->update([
+        $attendance = $request->attendance;
+
+        $attendance->update([
             'clock_in' => $request->requested_clock_in,
             'clock_out' => $request->requested_clock_out,
             'remark' => $request->requested_note,
         ]);
+
+        $attendance->breaks()->delete();
+
+        foreach ($request->breaks as $break) {
+            $attendance->breaks()->create([
+                'break_start' => $break->break_start,
+                'break_end'   => $break->break_end,
+            ]);
+        }
 
         $request->update([
             'status' => 'approved',

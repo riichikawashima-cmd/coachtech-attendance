@@ -61,10 +61,10 @@ body {
     color: #007bff;
 }
 
-.register__error {
+.register__error-message {
     color: red;
     font-size: 14px;
-    margin-bottom: 20px;
+    margin-top: 6px;
 }
 
 @media screen and (max-width: 1400px) {
