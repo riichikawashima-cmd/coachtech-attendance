@@ -7,18 +7,19 @@ body {
     width: min(900px, calc(100% - 40px));
     margin: 60px auto;
 }
+
 .attendance-detail__heading {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: 36px;
 }
 
 .attendance-detail__bar {
     width: 6px;
-    height: 24px;
+    height: 28px;
     background: #000;
 }
 
@@ -31,110 +32,83 @@ body {
 .detail-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
+/* カラム幅 */
 .detail-table th {
-    width: 160px;
-    text-align: left;
+    padding: 20px 0 20px 42px;
+    border-bottom: 1px solid #e5e5e5;
     font-size: 13px;
-    color: #666;
-    padding: 20px 24px 20px 56px;
-    border-bottom: 1px solid #eee;
     font-weight: 700;
+    color: #666;
+    text-align: left;
+    vertical-align: middle;
     background: #fff;
 }
 
 .detail-table td {
-    padding: 20px 40px;
-    border-bottom: 1px solid #eee;
-    text-align: left;
+    padding: 20px 0;
+    border-bottom: 1px solid #e5e5e5;
     vertical-align: middle;
 }
 
 .detail-table__name {
+    padding-left: 44px;
     font-weight: 700;
-    text-align: center;
+    font-size: 14px;
 }
 
 .detail-table__date {
+    padding-left: 44px;
     font-weight: 700;
     font-size: 13px;
-    text-align: center;
-}
-
-.detail-table__sep {
-    width: 60px;
-    text-align: center;
-    color: #666;
-    font-weight: 700;
 }
 
 .detail-table__time {
-    width: 200px;
-    padding-left: 10px;
+    padding-left: 44px;
 }
 
+/* 〜の位置 */
+.detail-table__sep {
+    position: relative;
+}
+
+/* 入力枠なくす */
 .time-box {
-    width: 80px;
-    height: 28px;
+    width: 68px;
+    border: none;
+    background: transparent;
     text-align: center;
-    border: 1px solid #e5e5e5;
-    border-radius: 3px;
-    background: #fff;
     font-weight: 700;
     font-size: 13px;
+    outline: none;
 }
 
 .remark-box {
-    width: 240px;
-    height: 46px;
-    border: 1px solid #e5e5e5;
-    border-radius: 3px;
-    background: #fff;
+    width: 210px;
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    font-size: 13px;
     resize: none;
+    outline: none;
 }
 
+/* ボタン */
 .attendance-detail__actions {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 28px;
 }
 
 .edit-btn {
+    min-width: 84px;
     background: #000;
     color: #fff;
     border: none;
-    padding: 10px 24px;
-    border-radius: 3px;
+    padding: 10px 0;
+    border-radius: 4px;
     font-weight: 700;
     cursor: pointer;
-}
-
-.time-box::-webkit-calendar-picker-indicator {
-    display: none;
-}
-
-@media (max-width: 850px) {
-
-    .attendance-detail {
-        margin: 40px auto;
-    }
-
-    .detail-table th {
-        padding: 16px 16px 16px 20px;
-        font-size: 12px;
-    }
-
-    .detail-table td {
-        padding: 16px;
-    }
-
-    .time-box {
-        width: 70px;
-    }
-
-    .remark-box {
-        width: 100%;
-    }
-
 }

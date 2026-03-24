@@ -13,13 +13,13 @@ class StampCorrectionRequestController extends Controller
             ->where('user_id', Auth::id())
             ->where('status', 'pending')
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(10);
 
         $approvedRequests = CorrectionRequest::with('attendance')
             ->where('user_id', Auth::id())
             ->where('status', 'approved')
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate(10);
 
         return view('stamp_correction_request.list', compact('pendingRequests', 'approvedRequests'));
     }

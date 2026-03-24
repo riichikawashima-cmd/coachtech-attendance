@@ -83,6 +83,39 @@ $tab = request('tab', 'pending'); // pending / approved
             </table>
         </div>
 
+        {{-- ページネーション --}}
+        @php
+        $paginator = $tab === 'pending' ? $pendingRequests : $approvedRequests;
+        $pageName = $tab === 'pending' ? 'pending_page' : 'approved_page';
+        @endphp
+
+        @if ($paginator->lastPage() > 1)
+        <div class="pagination">
+            @if ($paginator->onFirstPage())
+            <span class="pagination__item pagination__item--disabled">‹</span>
+            @else
+            <a class="pagination__item" href="{{ $paginator->appends(['tab' => $tab])->previousPageUrl() }}">‹</a>
+            @endif
+
+            @for ($page = 1; $page <= $paginator->lastPage(); $page++)
+                @if ($page == $paginator->currentPage())
+                <span class="pagination__item pagination__item--active">{{ $page }}</span>
+                @else
+                <a class="pagination__item"
+                    href="{{ $paginator->appends(['tab' => $tab, $pageName => $page])->url($page) }}">
+                    {{ $page }}
+                </a>
+                @endif
+                @endfor
+
+                @if ($paginator->hasMorePages())
+                <a class="pagination__item" href="{{ $paginator->appends(['tab' => $tab])->nextPageUrl() }}">›</a>
+                @else
+                <span class="pagination__item pagination__item--disabled">›</span>
+                @endif
+        </div>
+        @endif
+
     </div>
 </div>
 @endsection

@@ -13,12 +13,12 @@ class AdminStampCorrectionRequestController extends Controller
         $pendingRequests = CorrectionRequest::with(['user', 'attendance'])
             ->where('status', 'pending')
             ->latest()
-            ->get();
+            ->paginate(10, ['*'], 'pending_page');
 
         $approvedRequests = CorrectionRequest::with(['user', 'attendance'])
             ->where('status', 'approved')
             ->latest()
-            ->get();
+            ->paginate(10, ['*'], 'approved_page');
 
         return view('admin.stamp_correction_requests.list', compact(
             'pendingRequests',

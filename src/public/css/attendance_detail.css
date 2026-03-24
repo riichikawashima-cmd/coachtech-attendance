@@ -25,7 +25,7 @@ body {
 
 .attendance-detail__card {
     background: #fff;
-    border-radius: 8px;
+    border-radius: 4px;
     overflow: hidden;
 }
 
@@ -35,24 +35,9 @@ body {
     table-layout: fixed;
 }
 
-.detail-table .col-label {
-    width: 140px;
-}
-
-.detail-table .col-left {
-    width: 156px;
-}
-
-.detail-table .col-sep {
-    width: 48px;
-}
-
-.detail-table .col-right {
-    width: 156px;
-}
-
 .detail-table th {
-    padding: 20px 0 20px 42px;
+    width: 140px;
+    padding: 18px 0 18px 42px;
     border-bottom: 1px solid #e5e5e5;
     font-size: 13px;
     font-weight: 700;
@@ -64,89 +49,141 @@ body {
 }
 
 .detail-table td {
-    padding: 20px 0;
+    padding: 18px 0;
     border-bottom: 1px solid #e5e5e5;
     vertical-align: middle;
 }
 
+.detail-table__value {
+    padding-left: 80px;
+    padding-right: 44px;
+}
+
+/* 名前 → 左寄せ */
 .detail-table__name {
-    padding-left: 44px;
     font-weight: 700;
     font-size: 14px;
     text-align: left;
+    margin-left: 180px;  /* これ */
 }
 
-.detail-table__date {
-    padding-left: 44px;
+/* 日付 → 左寄せ */
+.detail-table__date-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 80px;
+    margin-left: 180px;  /* これ */
+}
+
+.detail-table__date-item {
     font-weight: 700;
     font-size: 13px;
-    text-align: left;
-}
-
-.detail-table__time {
-    padding-left: 44px;
-    text-align: left;
-}
-
-.detail-table__sep {
-    position: relative;
-    padding: 20px 0;
-    vertical-align: middle;
-}
-
-.detail-table__sep--mark::after {
-    content: "〜";
-    position: absolute;
-    left: -70px;
-    top: 50%;
-    transform: translateY(-50%);
     color: #000;
-    font-weight: 700;
-    font-size: 20px;
     line-height: 1;
 }
 
+.detail-table__time-row-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 22px;
+    margin-left: 180px;
+}
+
+.detail-table__time-box-wrap {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.detail-table__wave {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    line-height: 30px;
+}
+
+.detail-table__text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+    font-family: inherit;
+    line-height: 30px;
+}
+
+/* 備考 → 左寄せ */
 .detail-table__remark {
-    padding: 16px 0 16px 44px;
+    padding: 14px 44px;
     text-align: left;
 }
 
+.detail-table__time-box-wrap {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 30px;
+}
+
+.detail-table__remark .input-error {
+    margin-left: 180px;
+}
+
+.time-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80px;
+}
+
 .time-box {
-    width: 68px;
-    height: 20px;
+    width: 80px;
+    height: 30px;
     padding: 0;
-    margin: 0;
-    border: 1px solid #d9d9d9;
-    border-radius: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     background: #fff;
     text-align: center;
     font-size: 13px;
     font-weight: 700;
-    line-height: 20px;
+    line-height: 30px;
     box-sizing: border-box;
-    vertical-align: middle;
+    outline: none;
+    box-shadow: none;
 }
 
+/* 備考入力欄も左寄せ */
 .remark-box {
-    width: 210px;
-    height: 48px;
-    padding: 10px 12px;
+    width: 280px;
+    height: 60px;
+    padding: 5px 10px;
     margin: 0;
-    border: 1px solid #d9d9d9;
-    border-radius: 3px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     background: #fff;
     resize: none;
     font-size: 13px;
     font-weight: 700;
+    line-height: 18px;
     box-sizing: border-box;
     display: block;
+    outline: none;
+    box-shadow: none;
+    margin-left: 180px; /* これ */
+}
+
+.detail-table__remark .detail-table__text {
+    display: inline-block;
+    margin-left: 180px;
 }
 
 .attendance-detail__actions {
-    width: 900px;
     display: flex;
     justify-content: flex-end;
-    margin: 28px auto 0;
+    margin-top: 28px;
 }
 
 .edit-btn {
@@ -160,18 +197,27 @@ body {
     cursor: pointer;
 }
 
+.edit-btn--status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: default;
+    background: #757575;
+}
+
 .time-box:disabled,
 .remark-box:disabled {
-    background: #f3f3f3;
+    background: transparent;
     color: #666;
     cursor: not-allowed;
 }
 
 .approval-message {
-    color: #d60000;
+    color: #ff6b6b;
     font-weight: 700;
     text-align: right;
-    padding: 16px 0;
+    padding: 16px 0 0;
 }
 
 .input-error {
@@ -181,6 +227,8 @@ body {
     font-weight: 700;
     line-height: 1.4;
     text-align: left;
+    white-space: nowrap;
+    position: static;
 }
 
 .time-box::-webkit-calendar-picker-indicator {
@@ -192,22 +240,12 @@ body {
         width: 95%;
     }
 
-    .attendance-detail__actions {
-        width: 95%;
-    }
-
     .detail-table {
         table-layout: auto;
     }
 
-    .detail-table .col-label,
-    .detail-table .col-left,
-    .detail-table .col-sep,
-    .detail-table .col-right {
-        width: auto;
-    }
-
     .detail-table th {
+        width: 110px;
         padding: 16px 0 16px 18px;
         font-size: 12px;
     }
@@ -216,14 +254,20 @@ body {
         padding: 16px 0;
     }
 
-    .detail-table__name,
-    .detail-table__date,
-    .detail-table__time,
-    .detail-table__remark {
-        padding-left: 18px;
+    .detail-table__value {
+        padding-left: 14px;
+        padding-right: 14px;
     }
 
-    .detail-table__sep--mark::after {
+    .detail-table__date-row {
+        gap: 40px;
+    }
+
+    .detail-table__time-row-inner {
+        gap: 12px;
+    }
+
+    .detail-table__wave {
         font-size: 16px;
     }
 
@@ -232,7 +276,11 @@ body {
         font-size: 12px;
     }
 
+    .detail-table__time-box-wrap {
+        width: 60px;
+    }
+
     .remark-box {
-        width: 180px;
+        width: 100%;
     }
 }

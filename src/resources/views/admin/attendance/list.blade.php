@@ -34,11 +34,18 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($attendances as $attendance)
+                @forelse ($attendances as $attendance)
                 <tr>
                     <td>{{ $attendance->user->name }}</td>
-                    <td>{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}</td>
-                    <td>{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}</td>
+
+                    <td>
+                        {{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}
+                    </td>
+
+                    <td>
+                        {{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}
+                    </td>
+
                     <td>
                         @php
                         $breakSeconds = $attendance->breaks->sum(function ($break) {
@@ -50,17 +57,32 @@
 
                     <td>
                         @php
-                        $workSeconds = strtotime($attendance->clock_out) - strtotime($attendance->clock_in) - $breakSeconds;
+                        $workSeconds = ($attendance->clock_in && $attendance->clock_out)
+                        ? strtotime($attendance->clock_out) - strtotime($attendance->clock_in) - $breakSeconds
+                        : 0;
                         @endphp
                         {{ gmdate('H:i', $workSeconds) }}
                     </td>
+
                     <td>
                         <a href="/admin/attendance/{{ $attendance->id }}">詳細</a>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="6" style="text-align:center; padding:20px; color:#666;">
+                        データがありません
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
+
+    {{-- ページネーション --}}
+    <div class="pagination">
+        {{ $attendances->appends(['date' => $date])->links() }}
+    </div>
+
 </div>
 @endsection

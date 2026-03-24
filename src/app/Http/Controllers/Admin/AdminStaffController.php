@@ -11,7 +11,8 @@ class AdminStaffController extends Controller
 {
     public function index()
     {
-        $users = User::select('id', 'name', 'email')->get();
+        $users = User::select('id', 'name', 'email')
+            ->paginate(10);
 
         return view('admin.staff.list', compact('users'));
     }

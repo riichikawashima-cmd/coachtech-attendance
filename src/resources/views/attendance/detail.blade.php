@@ -21,88 +21,123 @@
             <div class="attendance-detail__card">
 
                 @php
-                $isLocked = $attendance && $attendance->requested_at;
                 $breaks = $attendance ? $attendance->breaks : collect();
+                $pendingBreaks = $pendingCorrectionRequest ? $pendingCorrectionRequest->breaks : collect();
+                $breakCount = $isLocked ? max($pendingBreaks->count(), 1) : ($breaks->count() + 1);
                 @endphp
 
                 <table class="detail-table">
-                    <colgroup>
-                        <col class="col-label">
-                        <col class="col-left">
-                        <col class="col-sep">
-                        <col class="col-right">
-                    </colgroup>
-
                     <tr>
                         <th>名前</th>
-                        <td class="detail-table__name" colspan="3">
-                            {{ Auth::user()->name }}
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__name">
+                                {{ Auth::user()->name }}
+                            </div>
                         </td>
                     </tr>
 
                     <tr>
                         <th>日付</th>
-                        <td class="detail-table__date">{{ $day->isoFormat('YYYY年') }}</td>
-                        <td class="detail-table__sep"></td>
-                        <td class="detail-table__date">{{ $day->isoFormat('M月D日') }}</td>
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__date-row">
+                                <span class="detail-table__date-item">{{ $day->isoFormat('YYYY年') }}</span>
+                                <span class="detail-table__date-item">{{ $day->isoFormat('M月D日') }}</span>
+                            </div>
+                        </td>
                     </tr>
 
-                    <tr>
+                    <tr class="detail-table__time-row">
                         <th>出勤・退勤</th>
-                        <td class="detail-table__time">
-                            <input
-                                type="text"
-                                class="time-box time-input"
-                                name="clock_in"
-                                value="{{ old('clock_in', $attendance && $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
-                                @if($isLocked) disabled @endif>
-                            @error('clock_in')
-                            <div class="input-error">{{ $message }}</div>
-                            @enderror
-                        </td>
-                        <td class="detail-table__sep detail-table__sep--mark"></td>
-                        <td class="detail-table__time">
-                            <input
-                                type="text"
-                                class="time-box time-input"
-                                name="clock_out"
-                                value="{{ old('clock_out', $attendance && $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
-                                @if($isLocked) disabled @endif>
-                            @error('clock_out')
-                            <div class="input-error">{{ $message }}</div>
-                            @enderror
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__time-row-inner">
+                                <div class="detail-table__time-box-wrap">
+                                    @if($isLocked)
+                                    <span class="detail-table__text">
+                                        {{ $pendingCorrectionRequest && $pendingCorrectionRequest->requested_clock_in ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_in)->format('H:i') : '' }}
+                                    </span>
+                                    @else
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="clock_in"
+                                            value="{{ old('clock_in', $attendance && $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}">
+                                        @error('clock_in')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    @endif
+                                </div>
+
+                                <span class="detail-table__wave">〜</span>
+
+                                <div class="detail-table__time-box-wrap">
+                                    @if($isLocked)
+                                    <span class="detail-table__text">
+                                        {{ $pendingCorrectionRequest && $pendingCorrectionRequest->requested_clock_out ? \Carbon\Carbon::parse($pendingCorrectionRequest->requested_clock_out)->format('H:i') : '' }}
+                                    </span>
+                                    @else
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="clock_out"
+                                            value="{{ old('clock_out', $attendance && $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}">
+                                        @error('clock_out')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
                     </tr>
-
-                    @php
-                    $breakCount = $breaks->count() + 1;
-                    @endphp
 
                     @for ($i = 0; $i < $breakCount; $i++)
-                        <tr>
+                        <tr class="detail-table__time-row">
                         <th>休憩{{ $i + 1 }}</th>
-                        <td class="detail-table__time">
-                            <input
-                                type="text"
-                                class="time-box time-input"
-                                name="break{{ $i + 1 }}_start"
-                                value="{{ old('break' . ($i + 1) . '_start', isset($breaks[$i]) && $breaks[$i]->break_start ? \Carbon\Carbon::parse($breaks[$i]->break_start)->format('H:i') : '') }}"
-                                @if($isLocked) disabled @endif>
-                            @error('break' . ($i + 1) . '_start')
-                            <div class="input-error">{{ $message }}</div>
-                            @enderror
-                        </td>
-                        <td class="detail-table__sep detail-table__sep--mark"></td>
-                        <td class="detail-table__time">
-                            <input
-                                type="text"
-                                class="time-box time-input"
-                                name="break{{ $i + 1 }}_end"
-                                value="{{ old('break' . ($i + 1) . '_end', isset($breaks[$i]) && $breaks[$i]->break_end ? \Carbon\Carbon::parse($breaks[$i]->break_end)->format('H:i') : '') }}"
-                                @if($isLocked) disabled @endif>
-                            @error('break' . ($i + 1) . '_end')
-                            <div class="input-error">{{ $message }}</div>
-                            @enderror
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__time-row-inner">
+                                <div class="detail-table__time-box-wrap">
+                                    @if($isLocked)
+                                    <span class="detail-table__text">
+                                        {{ isset($pendingBreaks[$i]) && $pendingBreaks[$i]->break_start ? \Carbon\Carbon::parse($pendingBreaks[$i]->break_start)->format('H:i') : '' }}
+                                    </span>
+                                    @else
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="break{{ $i + 1 }}_start"
+                                            value="{{ old('break' . ($i + 1) . '_start', isset($breaks[$i]) && $breaks[$i]->break_start ? \Carbon\Carbon::parse($breaks[$i]->break_start)->format('H:i') : '') }}">
+                                        @error('break' . ($i + 1) . '_start')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    @endif
+                                </div>
+
+                                <span class="detail-table__wave">〜</span>
+
+                                <div class="detail-table__time-box-wrap">
+                                    @if($isLocked)
+                                    <span class="detail-table__text">
+                                        {{ isset($pendingBreaks[$i]) && $pendingBreaks[$i]->break_end ? \Carbon\Carbon::parse($pendingBreaks[$i]->break_end)->format('H:i') : '' }}
+                                    </span>
+                                    @else
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="break{{ $i + 1 }}_end"
+                                            value="{{ old('break' . ($i + 1) . '_end', isset($breaks[$i]) && $breaks[$i]->break_end ? \Carbon\Carbon::parse($breaks[$i]->break_end)->format('H:i') : '') }}">
+                                        @error('break' . ($i + 1) . '_end')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
                         </tr>
                         @endfor
@@ -110,10 +145,16 @@
                         <tr>
                             <th>備考</th>
                             <td colspan="3" class="detail-table__remark">
-                                <textarea class="remark-box" name="remark" @if($isLocked) disabled @endif>{{ old('remark', $attendance->remark ?? '') }}</textarea>
+                                @if($isLocked)
+                                <span class="detail-table__text">
+                                    {{ $pendingCorrectionRequest->requested_note ?? '' }}
+                                </span>
+                                @else
+                                <textarea class="remark-box" name="remark">{{ old('remark', $attendance->remark ?? '') }}</textarea>
                                 @error('remark')
                                 <div class="input-error">{{ $message }}</div>
                                 @enderror
+                                @endif
                             </td>
                         </tr>
                 </table>

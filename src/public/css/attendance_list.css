@@ -30,11 +30,9 @@
     background: #ffffff;
     border-radius: 6px;
     height: 40px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 0 16px;
     margin-bottom: 18px;
 }
@@ -129,7 +127,6 @@
 }
 
 @media screen and (max-width: 850px) {
-
     .attendance-list__inner {
         width: 90%;
     }
@@ -151,5 +148,4 @@
     .month-label__text {
         font-size: 14px;
     }
-
 }

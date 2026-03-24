@@ -24,7 +24,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @forelse ($users as $user)
                     <tr>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
@@ -32,10 +32,20 @@
                             <a href="{{ url('/admin/attendance/staff/' . $user->id) }}">詳細</a>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="3" class="empty">スタッフがいません</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
+
+        {{-- ページネーション --}}
+        <div class="pagination">
+            {{ $users->links() }}
+        </div>
+
     </div>
 </div>
 @endsection
