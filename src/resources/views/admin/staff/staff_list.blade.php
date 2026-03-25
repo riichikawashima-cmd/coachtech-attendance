@@ -93,9 +93,7 @@
                         <td>{{ $breakText }}</td>
                         <td>{{ $totalText }}</td>
                         <td class="detail">
-                            @if ($attendance)
-                            <a href="{{ url('/admin/attendance/' . $attendance->id) }}">詳細</a>
-                            @endif
+                            <a href="{{ url('/admin/attendance/staff/' . request()->route('id') . '/' . $dateKey) }}">詳細</a>
                         </td>
                     </tr>
                     @endforeach

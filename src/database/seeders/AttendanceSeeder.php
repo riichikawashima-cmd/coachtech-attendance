@@ -11,22 +11,19 @@ class AttendanceSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::where('email', 'user@test.com')->first();
+        $users = User::all();
+        $date = Carbon::today();
 
-        if (!$user) return;
-
-        for ($i = 0; $i < 5; $i++) {
-            $date = Carbon::now()->subDays($i);
-
+        foreach ($users as $user) {
             Attendance::updateOrCreate(
                 [
                     'user_id' => $user->id,
                     'date' => $date->toDateString(),
                 ],
                 [
-                    'clock_in' => $date->copy()->setTime(9, 0),
-                    'clock_out' => $date->copy()->setTime(18, 0),
-                    'note' => 'テストデータ',
+                    'clock_in' => $date->copy()->setTime(rand(8, 10), 0),
+                    'clock_out' => $date->copy()->setTime(rand(17, 20), 0),
+                    'note' => 'ダミーデータ',
                 ]
             );
         }

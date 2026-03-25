@@ -4,7 +4,7 @@ body {
 }
 
 .attendance-detail {
-    width: min(900px, calc(100% - 40px));
+    width: 900px;
     margin: 60px auto;
 }
 
@@ -25,7 +25,7 @@ body {
 
 .attendance-detail__card {
     background: #fff;
-    border-radius: 8px;
+    border-radius: 4px;
     overflow: hidden;
 }
 
@@ -35,9 +35,9 @@ body {
     table-layout: fixed;
 }
 
-/* カラム幅 */
 .detail-table th {
-    padding: 20px 0 20px 42px;
+    width: 140px;
+    padding: 18px 0 18px 42px;
     border-bottom: 1px solid #e5e5e5;
     font-size: 13px;
     font-weight: 700;
@@ -45,57 +45,130 @@ body {
     text-align: left;
     vertical-align: middle;
     background: #fff;
+    white-space: nowrap;
 }
 
 .detail-table td {
-    padding: 20px 0;
+    padding: 18px 0;
     border-bottom: 1px solid #e5e5e5;
     vertical-align: middle;
 }
 
+.detail-table__value {
+    padding-left: 80px;
+    padding-right: 44px;
+}
+
 .detail-table__name {
-    padding-left: 44px;
     font-weight: 700;
     font-size: 14px;
+    text-align: left;
+    margin-left: 180px;
 }
 
-.detail-table__date {
-    padding-left: 44px;
+.detail-table__date-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 80px;
+    margin-left: 180px;
+}
+
+.detail-table__date-item {
     font-weight: 700;
     font-size: 13px;
+    color: #000;
+    line-height: 1;
 }
 
-.detail-table__time {
-    padding-left: 44px;
+.detail-table__time-row-inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 22px;
+    margin-left: 180px;
 }
 
-/* 〜の位置 */
-.detail-table__sep {
-    position: relative;
+.detail-table__time-box-wrap {
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 30px;
 }
 
-/* 入力枠なくす */
+.detail-table__wave {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+    line-height: 30px;
+}
+
+.detail-table__text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+    font-family: inherit;
+    line-height: 30px;
+}
+
+.detail-table__remark {
+    padding: 14px 44px;
+    text-align: left;
+}
+
+.detail-table__remark .input-error {
+    margin-left: 180px;
+}
+
+.time-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80px;
+}
+
 .time-box {
-    width: 68px;
-    border: none;
-    background: transparent;
+    width: 80px;
+    height: 30px;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
     text-align: center;
-    font-weight: 700;
     font-size: 13px;
+    font-weight: 700;
+    line-height: 30px;
+    box-sizing: border-box;
     outline: none;
+    box-shadow: none;
 }
 
 .remark-box {
-    width: 210px;
-    border: none;
-    background: transparent;
-    font-weight: 700;
-    font-size: 13px;
+    width: 280px;
+    height: 60px;
+    padding: 5px 10px;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
     resize: none;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    box-sizing: border-box;
+    display: block;
     outline: none;
+    box-shadow: none;
+    margin-left: 180px;
 }
 
-/* ボタン */
+.detail-table__remark .detail-table__text {
+    display: inline-block;
+    margin-left: 180px;
+}
+
 .attendance-detail__actions {
     display: flex;
     justify-content: flex-end;
@@ -111,4 +184,100 @@ body {
     border-radius: 4px;
     font-weight: 700;
     cursor: pointer;
+}
+
+.edit-btn--status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    cursor: default;
+    background: #757575;
+}
+
+.time-box:disabled,
+.remark-box:disabled {
+    background: transparent;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.approval-message {
+    color: #ff6b6b;
+    font-weight: 700;
+    text-align: right;
+    padding: 16px 0 0;
+}
+
+.input-error {
+    margin-top: 6px;
+    color: #d60000;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: left;
+    white-space: nowrap;
+    position: static;
+}
+
+.time-box::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+@media screen and (max-width: 850px) {
+    .attendance-detail {
+        width: 95%;
+    }
+
+    .detail-table {
+        table-layout: auto;
+    }
+
+    .detail-table th {
+        width: 110px;
+        padding: 16px 0 16px 18px;
+        font-size: 12px;
+    }
+
+    .detail-table td {
+        padding: 16px 0;
+    }
+
+    .detail-table__value {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .detail-table__date-row {
+        gap: 40px;
+    }
+
+    .detail-table__time-row-inner {
+        gap: 12px;
+    }
+
+    .detail-table__wave {
+        font-size: 16px;
+    }
+
+    .time-box {
+        width: 60px;
+        font-size: 12px;
+    }
+
+    .detail-table__time-box-wrap {
+        width: 60px;
+    }
+
+    .remark-box {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .detail-table__name,
+    .detail-table__date-row,
+    .detail-table__remark .input-error,
+    .detail-table__remark .detail-table__text {
+        margin-left: 14px;
+    }
 }

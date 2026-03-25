@@ -41,10 +41,29 @@
             </table>
         </div>
 
-        {{-- ページネーション --}}
+        @if ($users->lastPage() > 1)
         <div class="pagination">
-            {{ $users->links() }}
+            @if ($users->onFirstPage())
+            <span class="pagination__item pagination__item--disabled">‹</span>
+            @else
+            <a class="pagination__item" href="{{ $users->previousPageUrl() }}">‹</a>
+            @endif
+
+            @for ($page = 1; $page <= $users->lastPage(); $page++)
+                @if ($page == $users->currentPage())
+                <span class="pagination__item pagination__item--active">{{ $page }}</span>
+                @else
+                <a class="pagination__item" href="{{ $users->url($page) }}">{{ $page }}</a>
+                @endif
+                @endfor
+
+                @if ($users->hasMorePages())
+                <a class="pagination__item" href="{{ $users->nextPageUrl() }}">›</a>
+                @else
+                <span class="pagination__item pagination__item--disabled">›</span>
+                @endif
         </div>
+        @endif
 
     </div>
 </div>

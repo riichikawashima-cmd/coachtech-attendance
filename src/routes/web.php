@@ -56,6 +56,10 @@ Route::get('/admin/staff/list', [AdminStaffController::class, 'index'])
 Route::get('/admin/attendance/staff/{id}', [AdminStaffController::class, 'show'])
     ->middleware('auth:admin');
 
+Route::get('/admin/attendance/staff/{id}/{date}', [AdminAttendanceController::class, 'showByDate'])
+    ->middleware('auth:admin')
+    ->where('date', '\d{4}-\d{2}-\d{2}');
+
 Route::get('/admin/attendance/staff/{id}/csv', [AdminStaffController::class, 'csv'])
     ->middleware('auth:admin');
 

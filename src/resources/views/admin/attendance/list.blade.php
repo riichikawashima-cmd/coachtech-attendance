@@ -79,10 +79,29 @@
         </table>
     </div>
 
-    {{-- ページネーション --}}
+    @if ($attendances->lastPage() > 1)
     <div class="pagination">
-        {{ $attendances->appends(['date' => $date])->links() }}
+        @if ($attendances->onFirstPage())
+        <span class="pagination__item pagination__item--disabled">‹</span>
+        @else
+        <a class="pagination__item" href="{{ $attendances->appends(['date' => $date])->previousPageUrl() }}">‹</a>
+        @endif
+
+        @for ($page = 1; $page <= $attendances->lastPage(); $page++)
+            @if ($page == $attendances->currentPage())
+            <span class="pagination__item pagination__item--active">{{ $page }}</span>
+            @else
+            <a class="pagination__item" href="{{ $attendances->appends(['date' => $date, 'page' => $page])->url($page) }}">{{ $page }}</a>
+            @endif
+            @endfor
+
+            @if ($attendances->hasMorePages())
+            <a class="pagination__item" href="{{ $attendances->appends(['date' => $date])->nextPageUrl() }}">›</a>
+            @else
+            <span class="pagination__item pagination__item--disabled">›</span>
+            @endif
     </div>
+    @endif
 
 </div>
 @endsection

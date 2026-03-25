@@ -13,13 +13,6 @@ class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
-    /**
-     * Validate and create a newly registered user.
-     *
-     * @param  array<string, string>  $input
-     *
-     * @throws ValidationException
-     */
     public function create(array $input): User
     {
         Validator::make(
@@ -39,6 +32,8 @@ class CreateNewUser implements CreatesNewUsers
             [
                 'name.required' => 'お名前を入力してください',
                 'email.required' => 'メールアドレスを入力してください',
+                'email.email' => 'メールアドレスを正しく入力してください',
+                'email.unique' => 'このメールアドレスは既に使用されています',
                 'password.required' => 'パスワードを入力してください',
                 'password.min' => 'パスワードは8文字以上で入力してください',
                 'password_confirmation.required' => 'パスワードと一致しません',

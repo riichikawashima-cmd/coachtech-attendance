@@ -15,79 +15,118 @@
             勤怠詳細
         </h2>
 
+        @php
+        $day = \Carbon\Carbon::parse($attendance->date)->locale('ja');
+        $breaks = $attendance->breaks;
+        $breakCount = $breaks->count() + 1;
+        @endphp
+
         <form method="POST" action="/admin/attendance/{{ $attendance->id }}">
             @csrf
+            <input type="hidden" name="date" value="{{ $attendance->date }}">
 
             <div class="attendance-detail__card">
                 <table class="detail-table">
                     <tr>
                         <th>名前</th>
-                        <td class="detail-table__name" colspan="3">
-                            {{ $attendance->user->name }}
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__name">
+                                {{ $attendance->user->name }}
+                            </div>
                         </td>
                     </tr>
 
                     <tr>
                         <th>日付</th>
-                        <td class="detail-table__date">
-                            {{ \Carbon\Carbon::parse($attendance->date)->format('Y年') }}
-                        </td>
-                        <td class="detail-table__sep"></td>
-                        <td class="detail-table__date">
-                            {{ \Carbon\Carbon::parse($attendance->date)->format('n月j日') }}
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__date-row">
+                                <span class="detail-table__date-item">{{ $day->isoFormat('YYYY年') }}</span>
+                                <span class="detail-table__date-item">{{ $day->isoFormat('M月D日') }}</span>
+                            </div>
                         </td>
                     </tr>
 
-                    <tr>
+                    <tr class="detail-table__time-row">
                         <th>出勤・退勤</th>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="clock_in"
-                                value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}">
-                        </td>
-                        <td class="detail-table__sep">〜</td>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="clock_out"
-                                value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__time-row-inner">
+                                <div class="detail-table__time-box-wrap">
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="clock_in"
+                                            value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}">
+                                        @error('clock_in')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <span class="detail-table__wave">〜</span>
+
+                                <div class="detail-table__time-box-wrap">
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="clock_out"
+                                            value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}">
+                                        @error('clock_out')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                         </td>
                     </tr>
 
-                    @php
-                    $break1 = $attendance->breaks->get(0);
-                    $break2 = $attendance->breaks->get(1);
-                    @endphp
+                    @for ($i = 0; $i < $breakCount; $i++)
+                        <tr class="detail-table__time-row">
+                        <th>休憩{{ $i + 1 }}</th>
+                        <td class="detail-table__value" colspan="3">
+                            <div class="detail-table__time-row-inner">
+                                <div class="detail-table__time-box-wrap">
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="breaks[{{ $i }}][break_start]"
+                                            value="{{ old('breaks.' . $i . '.break_start', isset($breaks[$i]) && $breaks[$i]->break_start ? \Carbon\Carbon::parse($breaks[$i]->break_start)->format('H:i') : '') }}">
+                                        @error('breaks.' . $i . '.break_start')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
 
-                    <tr>
-                        <th>休憩</th>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="breaks[0][break_start]"
-                                value="{{ $break1 && $break1->break_start ? \Carbon\Carbon::parse($break1->break_start)->format('H:i') : '' }}">
-                        </td>
-                        <td class="detail-table__sep">〜</td>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="breaks[0][break_end]"
-                                value="{{ $break1 && $break1->break_end ? \Carbon\Carbon::parse($break1->break_end)->format('H:i') : '' }}">
-                        </td>
-                    </tr>
+                                <span class="detail-table__wave">〜</span>
 
-                    <tr>
-                        <th>休憩2</th>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="breaks[1][break_start]"
-                                value="{{ $break2 && $break2->break_start ? \Carbon\Carbon::parse($break2->break_start)->format('H:i') : '' }}">
+                                <div class="detail-table__time-box-wrap">
+                                    <div class="time-field">
+                                        <input
+                                            type="text"
+                                            class="time-box time-input"
+                                            name="breaks[{{ $i }}][break_end]"
+                                            value="{{ old('breaks.' . $i . '.break_end', isset($breaks[$i]) && $breaks[$i]->break_end ? \Carbon\Carbon::parse($breaks[$i]->break_end)->format('H:i') : '') }}">
+                                        @error('breaks.' . $i . '.break_end')
+                                        <div class="input-error">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
                         </td>
-                        <td class="detail-table__sep">〜</td>
-                        <td class="detail-table__time">
-                            <input type="text" class="time-box" name="breaks[1][break_end]"
-                                value="{{ $break2 && $break2->break_end ? \Carbon\Carbon::parse($break2->break_end)->format('H:i') : '' }}">
-                        </td>
-                    </tr>
+                        </tr>
+                        @endfor
 
-                    <tr>
-                        <th>備考</th>
-                        <td colspan="3">
-                            <textarea class="remark-box" name="note">{{ $attendance->note ?? '' }}</textarea>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>備考</th>
+                            <td colspan="3" class="detail-table__remark">
+                                <textarea class="remark-box" name="note">{{ old('note', $attendance->note ?? '') }}</textarea>
+                                @error('note')
+                                <div class="input-error">{{ $message }}</div>
+                                @enderror
+                            </td>
+                        </tr>
                 </table>
             </div>
 
@@ -98,4 +137,18 @@
 
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.time-input').forEach(input => {
+        input.addEventListener('input', function() {
+            let v = this.value.replace(/[^0-9]/g, '');
+
+            if (v.length >= 3) {
+                this.value = v.slice(0, 2) + ':' + v.slice(2, 4);
+            } else {
+                this.value = v;
+            }
+        });
+    });
+</script>
 @endsection
