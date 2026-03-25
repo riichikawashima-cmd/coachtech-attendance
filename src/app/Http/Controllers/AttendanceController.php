@@ -23,7 +23,7 @@ class AttendanceController extends Controller
         } elseif ($attendance->breaks()->whereNull('break_end')->exists()) {
             $status = '休憩中';
         } else {
-            $status = '勤務中';
+            $status = '出勤中';
         }
 
         return view('attendance.index', compact('now', 'status'));

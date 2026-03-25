@@ -39,7 +39,7 @@
             </form>
             @endif
 
-            @if ($status === '勤務中')
+            @if ($status === '出勤中')
             <div class="attendance__actions-row">
                 <form method="POST" action="/attendance/clock-out">
                     @csrf
