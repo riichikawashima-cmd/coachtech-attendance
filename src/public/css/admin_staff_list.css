@@ -27,6 +27,8 @@
 .staff-list__table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
+    /* ←追加（これ重要） */
 }
 
 .staff-list__table th,
@@ -34,14 +36,39 @@
     padding: 16px 20px;
     border-bottom: 1px solid #eee;
     font-size: 14px;
+    text-align: center;
 }
 
+/* ヘッダー */
 .staff-list__table th {
-    text-align: left;
     color: #666;
     background: #fafafa;
+    font-weight: 700;
 }
 
+/* 通常テキスト */
+.staff-list__table td {
+    color: #666;
+    font-weight: 600;
+}
+
+/* 列幅（←ここがズレの原因だった） */
+.staff-list__table th:nth-child(1),
+.staff-list__table td:nth-child(1) {
+    width: 40%;
+}
+
+.staff-list__table th:nth-child(2),
+.staff-list__table td:nth-child(2) {
+    width: 20%;
+}
+
+.staff-list__table th:nth-child(3),
+.staff-list__table td:nth-child(3) {
+    width: 40%;
+}
+
+/* 詳細だけ黒 */
 .staff-list__detail a {
     color: #000;
     font-weight: 700;

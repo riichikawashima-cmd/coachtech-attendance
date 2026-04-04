@@ -186,6 +186,12 @@ body {
     margin-top: 28px;
 }
 
+input:-webkit-autofill {
+    background-color: #fff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    -webkit-text-fill-color: #000;
+}
+
 .edit-btn {
     min-width: 84px;
     background: #000;

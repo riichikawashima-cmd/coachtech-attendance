@@ -184,6 +184,6 @@ class AttendanceDetailController extends Controller
             ]);
         }
 
-        return redirect()->route('attendance.list');
+        return redirect()->route('attendance.detail', ['date' => $date]);
     }
 }

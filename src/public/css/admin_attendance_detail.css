@@ -202,6 +202,12 @@ body {
     cursor: not-allowed;
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    -webkit-text-fill-color: #000;
+}
+
 .approval-message {
     color: #ff6b6b;
     font-weight: 700;

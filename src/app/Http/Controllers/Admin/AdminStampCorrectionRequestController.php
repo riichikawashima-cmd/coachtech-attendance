@@ -60,6 +60,6 @@ class AdminStampCorrectionRequestController extends Controller
             'status' => 'approved',
         ]);
 
-        return redirect('/admin/stamp_correction_request/list?tab=approved');
+        return redirect()->back();
     }
 }

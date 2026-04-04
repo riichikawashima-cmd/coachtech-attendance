@@ -64,9 +64,17 @@ body {
     box-sizing: border-box;
 }
 
+/* ヘッダー */
 .request-list__table th {
     background: #fafafa;
     font-weight: 700;
+    color: #666;
+}
+
+/* ←ここ追加（重要） */
+.request-list__table td {
+    color: #666;
+    font-weight: 600;
 }
 
 /* 状態 */
