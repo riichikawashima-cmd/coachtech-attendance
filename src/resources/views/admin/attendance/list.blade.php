@@ -15,7 +15,7 @@
     <div class="attendance-list__nav">
         <a href="{{ url('/admin/attendance/list?date=' . \Carbon\Carbon::parse($date)->subDay()->toDateString()) }}">← 前日</a>
         <span class="attendance-date">
-            <span class="calendar-icon"></span>
+            <img src="{{ asset('images/calender.png') }}" alt="calendar" class="calendar-icon">
             {{ \Carbon\Carbon::parse($date)->format('Y/m/d') }}
         </span>
         <a href="{{ url('/admin/attendance/list?date=' . \Carbon\Carbon::parse($date)->addDay()->toDateString()) }}">翌日 →</a>

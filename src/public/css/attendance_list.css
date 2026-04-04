@@ -58,11 +58,10 @@
 }
 
 .month-label__icon {
-    width: 14px;
-    height: 14px;
-    fill: none;
-    stroke: #000;
-    stroke-width: 2;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    display: block;
 }
 
 .attendance-list__table-wrapper {

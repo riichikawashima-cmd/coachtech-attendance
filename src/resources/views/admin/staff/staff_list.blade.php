@@ -21,12 +21,7 @@
             </a>
 
             <div class="month-label">
-                <svg class="month-label__icon" viewBox="0 0 24 24" aria-hidden="true">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2.5" x2="16" y2="6"></line>
-                    <line x1="8" y1="2.5" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
+                <img src="{{ asset('images/calender.png') }}" alt="calendar" class="month-label__icon">
                 <span class="month-label__text">{{ \Carbon\Carbon::parse(request('month', now()->format('Y-m')) . '-01')->format('Y/m') }}</span>
             </div>
 

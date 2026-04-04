@@ -65,11 +65,25 @@ class AttendanceDetailController extends Controller
 
         $errors = [];
 
+        if ($request->clock_in && !preg_match('/^\d{2}:\d{2}$/', $request->clock_in)) {
+            $errors['clock_in'] = '出勤時間の形式が不適切です';
+        }
+
+        if ($request->clock_out && !preg_match('/^\d{2}:\d{2}$/', $request->clock_out)) {
+            $errors['clock_out'] = '退勤時間の形式が不適切です';
+        }
+
         if (!$request->clock_in || !$request->clock_out) {
             $errors['clock_in'] = '出勤時間もしくは退勤時間が不適切な値です';
         }
 
-        if ($request->clock_in && $request->clock_out && strtotime($request->clock_in) >= strtotime($request->clock_out)) {
+        if (
+            $request->clock_in &&
+            $request->clock_out &&
+            preg_match('/^\d{2}:\d{2}$/', $request->clock_in) &&
+            preg_match('/^\d{2}:\d{2}$/', $request->clock_out) &&
+            strtotime($request->clock_in) >= strtotime($request->clock_out)
+        ) {
             $errors['clock_in'] = '出勤時間もしくは退勤時間が不適切な値です';
         }
 
@@ -92,6 +106,16 @@ class AttendanceDetailController extends Controller
             $start = $request->input($pair['start_key']);
             $end   = $request->input($pair['end_key']);
 
+            if ($start && !preg_match('/^\d{2}:\d{2}$/', $start)) {
+                $errors[$pair['start_key']] = '休憩開始時間の形式が不適切です';
+                continue;
+            }
+
+            if ($end && !preg_match('/^\d{2}:\d{2}$/', $end)) {
+                $errors[$pair['end_key']] = '休憩終了時間の形式が不適切です';
+                continue;
+            }
+
             if (($start && !$end) || (!$start && $end)) {
                 $errors[$pair['start_key']] = '休憩時間が不適切な値です';
                 continue;
@@ -102,7 +126,14 @@ class AttendanceDetailController extends Controller
                 continue;
             }
 
-            if ($request->clock_in && $request->clock_out && $start && $end) {
+            if (
+                $request->clock_in &&
+                $request->clock_out &&
+                preg_match('/^\d{2}:\d{2}$/', $request->clock_in) &&
+                preg_match('/^\d{2}:\d{2}$/', $request->clock_out) &&
+                $start &&
+                $end
+            ) {
                 $workStart = strtotime($request->clock_in);
                 $workEnd = strtotime($request->clock_out);
                 $breakStart = strtotime($start);

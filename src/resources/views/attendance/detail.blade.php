@@ -150,7 +150,7 @@
                                     {{ $pendingCorrectionRequest->requested_note ?? '' }}
                                 </span>
                                 @else
-                                <textarea class="remark-box" name="remark">{{ old('remark', $attendance->remark ?? '') }}</textarea>
+                                <textarea class="remark-box" name="remark">{{ old('remark', $attendance->note ?? '') }}</textarea>
                                 @error('remark')
                                 <div class="input-error">{{ $message }}</div>
                                 @enderror

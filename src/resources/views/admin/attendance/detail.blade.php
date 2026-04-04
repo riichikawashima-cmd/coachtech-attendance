@@ -21,9 +21,10 @@
         $breakCount = $breaks->count() + 1;
         @endphp
 
-        <form method="POST" action="/admin/attendance/{{ $attendance->id }}">
+        <form method="POST" action="/admin/attendance/{{ $attendance->exists ? $attendance->id : 'new' }}">
             @csrf
             <input type="hidden" name="date" value="{{ $attendance->date }}">
+            <input type="hidden" name="user_id" value="{{ $attendance->user->id }}">
 
             <div class="attendance-detail__card">
                 <table class="detail-table">

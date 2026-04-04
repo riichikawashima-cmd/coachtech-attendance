@@ -47,6 +47,11 @@ Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index']
 Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])
     ->middleware('auth:admin');
 
+/* 追加ここ */
+Route::post('/admin/attendance/new', [AdminAttendanceController::class, 'storeByDate'])
+    ->middleware('auth:admin');
+/* ここまで */
+
 Route::post('/admin/attendance/{id}', [AdminAttendanceController::class, 'update'])
     ->middleware('auth:admin');
 
