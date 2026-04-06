@@ -6,16 +6,6 @@
 3. DockerDesktopアプリを立ち上げる
 4. `docker compose up -d --build`
 
-
-
-> *MacのM1・M2チップのPCの場合、`no matching manifest for linux/arm64/v8 in the manifest list entries`のメッセージが表示されビルドができないことがあります。
-エラーが発生する場合は、docker-compose.ymlファイルの「mysql」内に「platform」の項目を追加で記載してください*
-``` bash
-mysql:
-    platform: linux/x86_64
-    image: mysql:8.0.26
-    environment:
-```
 **Laravel環境構築**
 1. `docker compose exec php bash`
 2. `composer install`
@@ -67,6 +57,18 @@ php artisan db:seed
 - アプリ：http://localhost
 - phpMyAdmin：http://localhost:8080
 - Mailhog（メール確認）：http://localhost:8025
+
+##　ログイン情報
+
+### 管理者
+- email: admin@test.com
+- password: password123
+
+### 一般ユーザー
+- email: user1@test.com
+- password: password123
+
+※一般ユーザーのダミーデータは20個作成。user1@test.comの1は20まで変更可能。
 
 
 ## テストの実行方法
