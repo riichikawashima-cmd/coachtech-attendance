@@ -5,7 +5,6 @@ namespace App\Actions\Fortify;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
 class CreateNewUser implements CreatesNewUsers
@@ -23,8 +22,8 @@ class CreateNewUser implements CreatesNewUsers
                     'string',
                     'email',
                 ],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-                'password_confirmation' => ['required'],
+                'password' => ['required', 'string', 'min:8'],
+                'password_confirmation' => ['required', 'same:password'],
             ],
             [
                 'name.required' => 'お名前を入力してください',
@@ -34,7 +33,7 @@ class CreateNewUser implements CreatesNewUsers
                 'password.required' => 'パスワードを入力してください',
                 'password.min' => 'パスワードは8文字以上で入力してください',
                 'password_confirmation.required' => '確認用パスワードを入力してください',
-                'password.confirmed' => 'パスワードと一致しません',
+                'password_confirmation.same' => 'パスワードと一致しません',
             ]
         )->validate();
 

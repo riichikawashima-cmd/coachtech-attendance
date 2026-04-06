@@ -1,9 +1,11 @@
 # 環境構築
 
-1. Docker環境構築
-`git clone https://github.com/riichikawashima-cmd/coachtech-attendance.git`
-`cd coachtech-attendance`
-`docker compose up -d --build`
+**Docker環境構築**
+1. `git clone https://github.com/riichikawashima-cmd/coachtech-attendance.git`
+2. `cd coachtech-attendance`
+3. DockerDesktopアプリを立ち上げる
+4. `docker compose up -d --build`
+
 
 
 > *MacのM1・M2チップのPCの場合、`no matching manifest for linux/arm64/v8 in the manifest list entries`のメッセージが表示されビルドができないことがあります。
@@ -153,3 +155,8 @@ PHPコンテナ内で以下を実行してください。
 ```bash
 ls tests/Feature
 ```
+
+## 補足（コーチ確認事項）
+※ 機能要件に詳細な記載がない場合は、本実装で問題ない旨コーチより許可をいただいています。
+
+1. 
