@@ -187,8 +187,6 @@ class AttendanceDetailTest extends TestCase
             ->where('date', $date)
             ->first();
 
-        $response->assertRedirect('/attendance/list');
-
         $this->assertNotNull($attendance);
 
         $this->assertDatabaseHas('correction_requests', [

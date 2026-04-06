@@ -44,11 +44,11 @@ php artisan db:seed
 ```
 
 ## 使用技術（実行環境）
-- PHP 8.1.34
-- Laravel 10.50.0
-- MySQL 8.0.44
-- Docker / Docker Compose
-
+- PHP 8.2.30
+- Laravel 12.53.0
+- MySQL 8.0.26
+- nginx
+- MailHog
 
 ## ER図
 ![alt](ER.png)

@@ -66,7 +66,7 @@ class RegisterTest extends TestCase
             'password_confirmation' => 'different123',
         ]);
 
-        $response->assertSessionHasErrors(['password']);
+        $response->assertSessionHasErrors(['password_confirmation']);
     }
 
     public function test_フォームに内容が入力されていた場合、データが正常に保存される(): void
