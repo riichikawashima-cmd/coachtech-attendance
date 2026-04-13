@@ -9,10 +9,10 @@
 @section('content')
 <div class="staff-list">
     <div class="staff-list__inner">
-        <h2 class="staff-list__heading">
+        <h1 class="staff-list__heading">
             <span class="staff-list__bar"></span>
             スタッフ一覧
-        </h2>
+        </h1>
 
         <div class="staff-list__table-wrapper">
             <table class="staff-list__table">

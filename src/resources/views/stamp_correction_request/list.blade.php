@@ -14,10 +14,10 @@ $tab = request('tab', 'pending'); // pending / approved
 <div class="request-list">
     <div class="request-list__inner">
 
-        <h2 class="request-list__heading">
+        <h1 class="request-list__heading">
             <span class="request-list__bar"></span>
             申請一覧
-        </h2>
+        </h1>
 
         <div class="request-list__tabs">
             <a class="tab {{ $tab === 'pending' ? 'tab--active' : '' }}"
@@ -83,7 +83,6 @@ $tab = request('tab', 'pending'); // pending / approved
             </table>
         </div>
 
-        {{-- ページネーション --}}
         @php
         $paginator = $tab === 'pending' ? $pendingRequests : $approvedRequests;
         $pageName = $tab === 'pending' ? 'pending_page' : 'approved_page';

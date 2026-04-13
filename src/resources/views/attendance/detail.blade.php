@@ -10,10 +10,10 @@
 <div class="attendance-detail">
     <div class="attendance-detail__inner">
 
-        <h2 class="attendance-detail__heading">
+        <h1 class="attendance-detail__heading">
             <span class="attendance-detail__bar"></span>
             勤怠詳細
-        </h2>
+        </h1>
 
         <form method="POST" action="{{ route('attendance.apply', ['date' => $day->toDateString()]) }}">
             @csrf

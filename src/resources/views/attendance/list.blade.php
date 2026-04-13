@@ -10,10 +10,10 @@
 <div class="attendance-list">
     <div class="attendance-list__inner">
 
-        <h2 class="attendance-list__heading">
+        <h1 class="attendance-list__heading">
             <span class="attendance-list__bar"></span>
             勤怠一覧
-        </h2>
+        </h1>
 
         <div class="attendance-list__month-nav">
             <a class="month-btn" href="{{ url('/attendance/list') }}?month={{ $prevMonth }}">

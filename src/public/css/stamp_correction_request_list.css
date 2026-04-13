@@ -64,41 +64,35 @@ body {
     box-sizing: border-box;
 }
 
-/* ヘッダー */
 .request-list__table th {
     background: #fafafa;
     font-weight: 700;
     color: #666;
 }
 
-/* ←ここ追加（重要） */
 .request-list__table td {
     color: #666;
     font-weight: 600;
 }
 
-/* 状態 */
 .request-list__table th:nth-child(1),
 .request-list__table td:nth-child(1) {
     width: 90px;
     white-space: nowrap;
 }
 
-/* 名前 */
 .request-list__table th:nth-child(2),
 .request-list__table td:nth-child(2) {
     width: 150px;
     word-break: break-word;
 }
 
-/* 対象日付 */
 .request-list__table th:nth-child(3),
 .request-list__table td:nth-child(3) {
     width: 120px;
     white-space: nowrap;
 }
 
-/* 申請理由 */
 .request-list__table th:nth-child(4),
 .request-list__table td:nth-child(4) {
     width: 290px;
@@ -112,14 +106,12 @@ body {
     text-overflow: ellipsis;
 }
 
-/* 申請日時 */
 .request-list__table th:nth-child(5),
 .request-list__table td:nth-child(5) {
     width: 110px;
     white-space: nowrap;
 }
 
-/* 詳細 */
 .request-list__table th:nth-child(6),
 .request-list__table td:nth-child(6) {
     width: 60px;
@@ -138,7 +130,6 @@ body {
     color: #666;
 }
 
-/* pagination */
 .pagination {
     margin-top: 20px;
     display: flex;
@@ -181,7 +172,6 @@ body {
     pointer-events: none;
 }
 
-/* レスポンシブ */
 @media screen and (max-width: 850px) {
     .request-list {
         width: 95%;

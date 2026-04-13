@@ -8,9 +8,9 @@
 
 @section('content')
 <div class="attendance-list">
-    <h2 class="attendance-list__title">
+    <h1 class="attendance-list__title">
         {{ \Carbon\Carbon::parse($date)->format('Y年n月j日') }}の勤怠
-    </h2>
+    </h1>
 
     <div class="attendance-list__nav">
         <a href="{{ url('/admin/attendance/list?date=' . \Carbon\Carbon::parse($date)->subDay()->toDateString()) }}">← 前日</a>

@@ -9,7 +9,7 @@
 @section('content')
 <div class="register-wrapper">
     <div class="register">
-        <h2 class="register__title">会員登録</h2>
+        <h1 class="register__title">会員登録</h1>
 
         <form method="POST" action="{{ route('register') }}" class="register__form" novalidate>
             @csrf

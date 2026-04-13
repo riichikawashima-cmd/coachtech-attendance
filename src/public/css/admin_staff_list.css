@@ -28,7 +28,6 @@
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
-    /* ←追加（これ重要） */
 }
 
 .staff-list__table th,
@@ -39,20 +38,17 @@
     text-align: center;
 }
 
-/* ヘッダー */
 .staff-list__table th {
     color: #666;
     background: #fafafa;
     font-weight: 700;
 }
 
-/* 通常テキスト */
 .staff-list__table td {
     color: #666;
     font-weight: 600;
 }
 
-/* 列幅（←ここがズレの原因だった） */
 .staff-list__table th:nth-child(1),
 .staff-list__table td:nth-child(1) {
     width: 40%;
@@ -68,14 +64,12 @@
     width: 40%;
 }
 
-/* 詳細だけ黒 */
 .staff-list__detail a {
     color: #000;
     font-weight: 700;
     text-decoration: none;
 }
 
-/* pagination */
 .pagination {
     margin-top: 20px;
     display: flex;
