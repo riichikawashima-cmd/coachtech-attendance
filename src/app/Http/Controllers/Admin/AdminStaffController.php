@@ -52,11 +52,15 @@ class AdminStaffController extends Controller
         $month = $request->input('month', now()->format('Y-m'));
         $user = User::findOrFail($id);
 
-        $attendances = Attendance::with('breaks')
+        $start = Carbon::createFromFormat('Y-m', $month)->startOfMonth();
+        $end = Carbon::createFromFormat('Y-m', $month)->endOfMonth();
+
+        $attendancesByDate = Attendance::with('breaks')
             ->where('user_id', $id)
-            ->where('date', 'like', $month . '%')
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->orderBy('date', 'asc')
-            ->get();
+            ->get()
+            ->keyBy('date');
 
         $filename = 'attendance_' . $id . '_' . $month . '.csv';
 
@@ -65,7 +69,7 @@ class AdminStaffController extends Controller
             'Content-Disposition' => "attachment; filename={$filename}",
         ];
 
-        $callback = function () use ($attendances, $user) {
+        $callback = function () use ($attendancesByDate, $user, $start, $end) {
             $file = fopen('php://output', 'w');
 
             fputcsv($file, ['スタッフ名：' . $user->name]);
@@ -74,37 +78,48 @@ class AdminStaffController extends Controller
 
             $weekDays = ['日', '月', '火', '水', '木', '金', '土'];
 
-            foreach ($attendances as $attendance) {
-                $date = Carbon::parse($attendance->date);
+            for ($date = $start->copy(); $date->lte($end); $date->addDay()) {
+                $dateKey = $date->toDateString();
+                $attendance = $attendancesByDate->get($dateKey);
+
                 $formattedDate = $date->format('Y/m/d') . '（' . $weekDays[$date->dayOfWeek] . '）';
 
-                $clockIn = $attendance->clock_in
-                    ? Carbon::parse($attendance->clock_in)->format('H:i')
-                    : '';
+                $clockIn = '';
+                $clockOut = '';
+                $breakTime = '';
+                $workTime = '';
+                $note = '';
 
-                $clockOut = $attendance->clock_out
-                    ? Carbon::parse($attendance->clock_out)->format('H:i')
-                    : '';
+                if ($attendance) {
+                    $clockIn = $attendance->clock_in
+                        ? Carbon::parse($attendance->clock_in)->format('H:i')
+                        : '';
 
-                $breakMinutes = 0;
-                foreach ($attendance->breaks as $break) {
-                    if ($break->break_start && $break->break_end) {
-                        $breakMinutes += Carbon::parse($break->break_start)
-                            ->diffInMinutes(Carbon::parse($break->break_end));
+                    $clockOut = $attendance->clock_out
+                        ? Carbon::parse($attendance->clock_out)->format('H:i')
+                        : '';
+
+                    $breakMinutes = 0;
+                    foreach ($attendance->breaks as $break) {
+                        if ($break->break_start && $break->break_end) {
+                            $breakMinutes += Carbon::parse($break->break_start)
+                                ->diffInMinutes(Carbon::parse($break->break_end));
+                        }
                     }
+
+                    $breakTime = sprintf('%02d:%02d', floor($breakMinutes / 60), $breakMinutes % 60);
+
+                    $workMinutes = 0;
+                    if ($attendance->clock_in && $attendance->clock_out) {
+                        $totalMinutes = Carbon::parse($attendance->clock_in)
+                            ->diffInMinutes(Carbon::parse($attendance->clock_out));
+
+                        $workMinutes = max($totalMinutes - $breakMinutes, 0);
+                    }
+
+                    $workTime = sprintf('%02d:%02d', floor($workMinutes / 60), $workMinutes % 60);
+                    $note = $attendance->note ?? '';
                 }
-
-                $breakTime = sprintf('%02d:%02d', floor($breakMinutes / 60), $breakMinutes % 60);
-
-                $workMinutes = 0;
-                if ($attendance->clock_in && $attendance->clock_out) {
-                    $totalMinutes = Carbon::parse($attendance->clock_in)
-                        ->diffInMinutes(Carbon::parse($attendance->clock_out));
-
-                    $workMinutes = max($totalMinutes - $breakMinutes, 0);
-                }
-
-                $workTime = sprintf('%02d:%02d', floor($workMinutes / 60), $workMinutes % 60);
 
                 fputcsv($file, [
                     $formattedDate,
@@ -112,7 +127,7 @@ class AdminStaffController extends Controller
                     $clockOut,
                     $breakTime,
                     $workTime,
-                    $attendance->note ?? '',
+                    $note,
                 ]);
             }
 
