@@ -17,7 +17,6 @@ return new class extends Migration
 
             $table->dateTime('break_start')->nullable();
             $table->dateTime('break_end')->nullable();
-
             $table->timestamps();
         });
     }

@@ -21,12 +21,13 @@ return new class extends Migration
 
             $table->dateTime('requested_clock_in')->nullable();
             $table->dateTime('requested_clock_out')->nullable();
+            $table->dateTime('requested_break1_start')->nullable();
+            $table->dateTime('requested_break1_end')->nullable();
+            $table->dateTime('requested_break2_start')->nullable();
+            $table->dateTime('requested_break2_end')->nullable();
             $table->text('requested_note')->nullable();
-
             $table->string('status')->default('pending');
-
             $table->text('admin_comment')->nullable();
-
             $table->timestamps();
         });
     }
