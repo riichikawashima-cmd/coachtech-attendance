@@ -33,6 +33,11 @@ MAIL_FROM_NAME="Attendance App"
 php artisan key:generate
 ```
 
+6. ストレージリンク作成
+``` bash
+php artisan storage:link
+```
+
 6. マイグレーションの実行
 ``` bash
 php artisan migrate
@@ -41,6 +46,11 @@ php artisan migrate
 7. シーディングの実行
 ``` bash
 php artisan db:seed
+```
+
+※ 環境によっては「laravel.log Permission denied」エラーが発生する場合があります。その場合は以下を実行してください。
+``` bash
+docker-compose exec php sh -lc "chown -R www-data:www-data storage bootstrap/cache"
 ```
 
 ## 使用技術（実行環境）
@@ -54,7 +64,8 @@ php artisan db:seed
 ![alt](ER.png)
 
 ## URL
-- アプリ：http://localhost
+- アプリ（管理者）：http://localhost/admin/login
+- アプリ（スタッフ）：http://localhost/login
 - phpMyAdmin：http://localhost:8080
 - Mailhog（メール確認）：http://localhost:8025
 
